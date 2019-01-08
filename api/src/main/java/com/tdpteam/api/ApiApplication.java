@@ -7,9 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@SpringBootApplication(scanBasePackageClasses = ServiceConfig.class)
-@EntityScan(basePackageClasses = RepoConfig.class)
-@EnableJpaRepositories(basePackageClasses = RepoConfig.class)
+@SpringBootApplication(scanBasePackages = {"com.tdpteam.service", "com.tdpteam.api"})
+@EntityScan(basePackages = "com.tdpteam.repo.entity")
+@EnableJpaRepositories(basePackages = "com.tdpteam.repo.repository")
 public class ApiApplication {
 
     public static void main(String[] args) {
