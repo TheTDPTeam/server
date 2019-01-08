@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>Login</title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width"/>
+    <base href="/"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.1.3/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/layout.css}" href="../static/css/layout.css"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/font-awesome/4.7.0/css/font-awesome.min.css}"/>
+</head>
+<body>
+<header>
+
+</header>
+<section>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Student Management System</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <p>Aptech</p>
+                <li sec:authorize="hasAuthority('ADMIN')">
+                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Account
+                        Management</a>
+                    <ul class="collapse list-unstyled" id="homeSubmenu">
+                        <li>
+                            <a th:href="@{/accounts}">Account list</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/accounts/add}">Add account</a>
+                        </li>
+                    </ul>
+                </li>
+                <li sec:authorize="hasAuthority('STAFF')">
+                    <a href="#teacherSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Teacher
+                        Management</a>
+                    <ul class="collapse list-unstyled" id="teacherSubmenu">
+                        <li>
+                            <a href="#">Teacher list</a>
+                        </li>
+                        <li>
+                            <a href="#">Add teacher</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <div id="myContent">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <button type="button" id="sidebarCollapse" class="btn btn-info">
+                    <i class="fa fa-align-left"></i>
+                </button>
+            </nav>
+            <div layout:fragment="content" id="contentContainer">
+                Your content
+            </div>
+        </div>
+    </div>
+</section>
+<script type="text/javascript" th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/bootstrap/4.1.3/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/layout.js}"></script>
+</body>
+</html>

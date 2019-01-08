@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Account list</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <a th:href="@{/accounts/add}">
+        <button class="btn btn-primary">
+            Add account
+        </button>
+    </a>
+    <br/>
+    <table class="table table-striped table-responsive-md">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Email</th>
+            <th scope="col">First name</th>
+            <th scope="col">Last name</th>
+            <th scope="col">Created at</th>
+            <th scope="col">Is activated</th>
+            <th scope="col">Role</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each="account: ${accounts}" th:if="${!account.getEmail().equals(#authentication?.name)}">
+            <th scope="row" th:text="${account.getId()}"></th>
+            <td th:text="${account.getEmail()}"></td>
+            <td th:text="${account.getFirstName()}"></td>
+            <td th:text="${account.getLastName()}"></td>
+            <td th:text="${#dates.format(account.getCreatedAt(),'MMM dd, yyyy')}"></td>
+            <td th:text="${account.isActivated()?'Activated':'Deactivated'}" th:style="'color:' + ${account.isActivated() ? '#28a745':'#ffc107'}"></td>
+            <td th:text="${account.getRole().getRole()}"></td>
+            <td>
+                <a th:href="@{/accounts/changeActivation/{id}(id = ${account.getId()})}">
+                    <button class="btn" th:classappend="${account.isActivated()} ? 'btn-warning' : 'btn-success'"
+                            th:text="${account.isActivated()?'Deactivate':'Activate'}"></button>
+                </a>
+                <a th:href="@{/accounts/delete/{id}(id = ${account.getId()})}" onclick="return confirm('Are you sure?')">
+                    <button class="btn btn-danger" th:text="Delete"></button>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
