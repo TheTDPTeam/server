@@ -1,7 +1,5 @@
 package com.tdpteam.api;
 
-import com.tdpteam.repo.config.RepoConfig;
-import com.tdpteam.service.config.ServiceConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
