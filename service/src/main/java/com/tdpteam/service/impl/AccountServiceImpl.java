@@ -51,7 +51,7 @@ public class AccountServiceImpl implements AccountService {
     public Account saveAccount(Account user) {
         String generatedPassword = passwordService.generatePassword();
         user.setPassword(bCryptPasswordEncoder.encode(generatedPassword));
-        String emailContent = generateAccountCreationMailContent(user.getFirstName(), user.getEmail(), generatedPassword);
+        String emailContent = generateAccountCreationMailContent(user.getUserDetail().getFirstName(), user.getEmail(), generatedPassword);
         mailService.sendMail(user.getEmail(), Constants.AccountCreationEmailSubject, emailContent);
         System.out.println(user.getPassword());
         user.setActivated(true);

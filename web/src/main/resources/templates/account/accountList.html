@@ -33,8 +33,8 @@
         <tr th:each="account: ${accounts}" th:if="${!account.getEmail().equals(#authentication?.name)}">
             <th scope="row" th:text="${account.getId()}"></th>
             <td th:text="${account.getEmail()}"></td>
-            <td th:text="${account.getFirstName()}"></td>
-            <td th:text="${account.getLastName()}"></td>
+            <td th:text="${account.getUserDetail().getFirstName()}"></td>
+            <td th:text="${account.getUserDetail().getLastName()}"></td>
             <td th:text="${#dates.format(account.getCreatedAt(),'MMM dd, yyyy')}"></td>
             <td th:text="${account.isActivated()?'Activated':'Deactivated'}" th:style="'color:' + ${account.isActivated() ? '#28a745':'#ffc107'}"></td>
             <td th:text="${account.getRole().getRole()}"></td>
