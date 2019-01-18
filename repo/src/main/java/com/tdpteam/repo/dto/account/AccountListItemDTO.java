@@ -1,6 +1,7 @@
 package com.tdpteam.repo.dto.account;
 
 import com.tdpteam.repo.entity.user.Role;
+import com.tdpteam.repo.entity.user.UserDetail;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,9 +16,7 @@ public class AccountListItemDTO {
 
     private String email;
 
-    private String firstName;
-
-    private String lastName;
+    private UserDetail userDetail;
 
     private Date createdAt;
 

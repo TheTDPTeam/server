@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Date;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -24,11 +25,8 @@ public class Account extends BaseEntityAudit implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column
-    private String firstName;
-
-    @Column
-    private String lastName;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "account")
+    private UserDetail userDetail;
 
     @Column
     private boolean isActivated;
