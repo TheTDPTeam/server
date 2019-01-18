@@ -22,13 +22,13 @@ public class ConfigServiceImpl implements ConfigService {
         if (config == null){
             return false;
         }
-        return config.getValue().equals(Constants.AdminIsConfigured);
+        return config.getValue().equals(Constants.ADMIN_IS_CONFIGURED);
     }
 
     @Override
     public void setAdminConfigured(boolean value) {
         Config config = configRepository.findByKey("Admin");
-        config.setValue(value ? Constants.AdminIsConfigured : Constants.AdminIsNotConfigured);
+        config.setValue(value ? Constants.ADMIN_IS_CONFIGURED : Constants.ADMIN_IS_NOT_CONFIGURED);
         configRepository.save(config);
     }
 }

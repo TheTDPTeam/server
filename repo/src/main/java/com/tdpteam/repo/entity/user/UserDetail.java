@@ -41,4 +41,8 @@ public class UserDetail {
 
     @Column
     private String address;
+
+    public String getFullName(){
+        return getFirstName() + " " + getLastName();
+    }
 }

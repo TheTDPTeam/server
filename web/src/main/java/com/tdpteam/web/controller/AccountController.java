@@ -64,6 +64,7 @@ public class AccountController {
             modelAndView.setViewName("account/addAccount");
         } else {
             Account userAccount = modelMapper.map(accountCreationDTO, Account.class);
+            userAccount = accountService.updateUserDetail(accountCreationDTO, userAccount);
             userAccount.setRole(roleRepository.findByRole(String.valueOf(accountCreationDTO.getRole())));
             accountService.saveAccount(userAccount);
             modelAndView.setViewName("redirect:/accounts");
