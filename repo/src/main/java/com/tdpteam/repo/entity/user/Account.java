@@ -1,7 +1,7 @@
 package com.tdpteam.repo.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tdpteam.repo.entity.BaseEntityAudit;
+import com.tdpteam.repo.entity.base.BaseEntityAudit;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.OnDelete;
@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.Date;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -25,8 +24,14 @@ public class Account extends BaseEntityAudit implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "account")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "account", optional = false)
     private UserDetail userDetail;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "account")
+    private Student student;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "account")
+    private Teacher teacher;
 
     @Column
     private boolean isActivated;
