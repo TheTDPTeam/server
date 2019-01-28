@@ -1,4 +1,4 @@
-package com.tdpteam.repo.entity;
+package com.tdpteam.repo.entity.base;
 
 import lombok.Getter;
 
