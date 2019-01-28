@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -20,7 +21,7 @@ public class Semester extends BaseEntityAudit {
     private Course course;
 
     @OneToMany(mappedBy = "semester")
-    private Set<Subject> subjects;
+    private Set<Subject> subjects = new HashSet<>();
 
     @Column
     private String description;

@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -22,8 +23,8 @@ public class Course extends BaseEntityAudit {
     private String code;
 
     @OneToMany(mappedBy = "course")
-    private Set<Semester> semesters;
+    private Set<Semester> semesters = new HashSet<>();
 
     @OneToMany(mappedBy = "course")
-    private Set<Batch> batches;
+    private Set<Batch> batches = new HashSet<>();
 }

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -28,12 +29,12 @@ public class BClass extends BaseEntityAudit {
     @JoinTable(name = "bClass_student",
             joinColumns = @JoinColumn(name = "bClass_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id"))
-    private Set<Student> students;
+    private Set<Student> students = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "subject_id", nullable = false)
     private Subject subject;
 
     @OneToMany(mappedBy = "bClass")
-    private Set<Attendance> attendance;
+    private Set<Attendance> attendance = new HashSet<>();
 }

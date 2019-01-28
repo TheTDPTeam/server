@@ -1,12 +1,11 @@
 package com.tdpteam.repo.repository;
 
 import com.tdpteam.repo.entity.Course;
+import com.tdpteam.repo.entity.Semester;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface CourseRepository extends JpaRepository<Course, Long> {
-    List<Course> findAllByOrOrderByCreatedAtDesc();
+public interface SemesterRepository extends JpaRepository<Semester, Long> {
+    int countByCourse(Course course);
 }
