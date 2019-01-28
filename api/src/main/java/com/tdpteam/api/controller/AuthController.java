@@ -1,7 +1,7 @@
 package com.tdpteam.api.controller;
 
 import com.tdpteam.api.config.JwtTokenProvider;
-import com.tdpteam.api.request.AuthenticationRequest;
+import com.tdpteam.repo.api.request.AuthenticationRequest;
 import com.tdpteam.repo.entity.user.Account;
 import com.tdpteam.service.interf.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;

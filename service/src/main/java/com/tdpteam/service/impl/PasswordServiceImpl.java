@@ -10,8 +10,8 @@ public class PasswordServiceImpl implements PasswordService {
     @Override
     public String generatePassword() {
         return RandomStringUtils.random(
-                Constants.DefaultPasswordLength,
-                Constants.UseLettersForDefaultPassword,
-                Constants.UseNumbersForDefaultPassword);
+                Constants.DEFAULT_PASSWORD_LENGTH,
+                Constants.USE_LETTERS_FOR_DEFAULT_PASSWORD,
+                Constants.USE_NUMBERS_FOR_DEFAULT_PASSWORD);
     }
 }

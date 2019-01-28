@@ -1,6 +1,7 @@
 package com.tdpteam.web.controller;
 
 import com.tdpteam.repo.dto.account.AccountSetupDTO;
+import com.tdpteam.repo.entity.user.UserDetail;
 import com.tdpteam.service.helper.RoleType;
 import com.tdpteam.repo.entity.user.Account;
 import com.tdpteam.repo.repository.RoleRepository;
@@ -55,6 +56,7 @@ public class SetupController {
             modelAndView.setViewName("setup");
         } else {
             Account adminAccount = modelMapper.map(accountSetupDTO, Account.class);
+            adminAccount = accountService.updateUserDetail(accountSetupDTO, adminAccount);
             adminAccount.setRole(roleRepository.findByRole(String.valueOf(RoleType.ADMIN)));
             Account result = accountService.saveAccount(adminAccount);
             configService.setAdminConfigured(true);

@@ -1,4 +1,4 @@
-package com.tdpteam.api.request;
+package com.tdpteam.repo.api.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

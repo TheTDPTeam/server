@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 
 public interface AccountService {
     Account findAccountByEmail(String email);
+    Account findAccountById(Long id);
+    Account updateUserDetail(Object accountUpdateDTO, Account account);
     Account saveAccount(Account user);
     String generateAccountCreationMailContent(String firstName, String email, String password);
     Page<AccountListItemDTO> getPaginatedAccountList(Pageable pageable);

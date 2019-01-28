@@ -1,6 +1,8 @@
 package com.tdpteam.service.impl;
 
 import com.tdpteam.repo.dto.account.AccountListItemDTO;
+import com.tdpteam.repo.entity.user.UserDetail;
+import com.tdpteam.service.exception.UserNotFoundException;
 import com.tdpteam.service.helper.Constants;
 import com.tdpteam.repo.entity.user.Account;
 import com.tdpteam.repo.repository.AccountRepository;
@@ -48,11 +50,28 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public Account findAccountById(Long id) {
+        Optional<Account> account = accountRepository.findById(id);
+        if(!account.isPresent()){
+            throw new UserNotFoundException(Constants.USER_NOT_FOUND_EXCEPTION_MESSAGE);
+        }
+        return account.get();
+    }
+
+    @Override
+    public Account updateUserDetail(Object accountUpdateDTO, Account account) {
+        UserDetail userDetail = new UserDetail(account);
+        modelMapper.map(accountUpdateDTO, userDetail);
+        account.setUserDetail(userDetail);
+        return account;
+    }
+
+    @Override
     public Account saveAccount(Account user) {
         String generatedPassword = passwordService.generatePassword();
         user.setPassword(bCryptPasswordEncoder.encode(generatedPassword));
-        String emailContent = generateAccountCreationMailContent(user.getFirstName(), user.getEmail(), generatedPassword);
-        mailService.sendMail(user.getEmail(), Constants.AccountCreationEmailSubject, emailContent);
+        String emailContent = generateAccountCreationMailContent(user.getUserDetail().getFirstName(), user.getEmail(), generatedPassword);
+        mailService.sendMail(user.getEmail(), Constants.ACCOUNT_CREATION_EMAIL_SUBJECT, emailContent);
         System.out.println(user.getPassword());
         user.setActivated(true);
         return accountRepository.save(user);
