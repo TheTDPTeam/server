@@ -12,7 +12,7 @@ import javax.validation.constraints.Pattern;
 @AllArgsConstructor
 public class CourseDTO {
     @NotEmpty(message = "Please input the name of new course")
-    @Pattern(regexp = "^[A-Za-z0-9]*$", message = "Please input a valid name of new course")
+    @Pattern(regexp = "^[A-Za-z0-9\\s]*$", message = "Please input a valid name of new course")
     private String name;
 
     @NotEmpty(message = "Please input the code of new course")

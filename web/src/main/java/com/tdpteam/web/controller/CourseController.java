@@ -1,24 +1,28 @@
 package com.tdpteam.web.controller;
 
 import com.tdpteam.repo.dto.course.CourseDTO;
-import com.tdpteam.repo.dto.course.CourseEditDTO;
 import com.tdpteam.repo.dto.course.CourseListItemDTO;
 import com.tdpteam.repo.entity.Course;
-import com.tdpteam.service.exception.CourseNotFoundException;
+import com.tdpteam.service.helper.ExceptionLogGenerator;
 import com.tdpteam.service.interf.CourseService;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
 @Controller
 @RequestMapping("/cms")
 public class CourseController {
+    private static final Logger logger =
+            LoggerFactory.getLogger(CourseController.class);
     private CourseService courseService;
     private ModelMapper modelMapper;
 
@@ -30,7 +34,7 @@ public class CourseController {
 
 
     @GetMapping(value = "/courses")
-    public ModelAndView getAllCourses(){
+    public ModelAndView getAllCourses() {
         ModelAndView modelAndView = new ModelAndView();
         List<CourseListItemDTO> courseListItemDTOList = courseService.getAllCourses();
         modelAndView.addObject("courses", courseListItemDTOList);
@@ -39,7 +43,7 @@ public class CourseController {
     }
 
     @GetMapping(value = "/courses/add")
-    public ModelAndView showAddCourseView(){
+    public ModelAndView showAddCourseView() {
         ModelAndView modelAndView = new ModelAndView();
         CourseDTO courseDTO = new CourseDTO();
         modelAndView.addObject("course", courseDTO);
@@ -48,11 +52,11 @@ public class CourseController {
     }
 
     @PostMapping(value = "/courses/add")
-    public ModelAndView addCourse(@Valid @ModelAttribute("course") CourseDTO courseDTO, BindingResult bindingResult){
+    public ModelAndView addCourse(@Valid @ModelAttribute("course") CourseDTO courseDTO, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName("course/addCourse");
-        } else{
+        } else {
             Course course = modelMapper.map(courseDTO, Course.class);
             courseService.saveCourse(course);
             modelAndView.setViewName("redirect:/cms/courses");
@@ -61,28 +65,34 @@ public class CourseController {
     }
 
     @GetMapping(value = "/courses/edit/{id}")
-    public ModelAndView getEditCourseView(@PathVariable(name = "id") Long id){
+    public ModelAndView getEditCourseView(@PathVariable(name = "id") Long id) {
         ModelAndView modelAndView = new ModelAndView();
-        try {
-            CourseEditDTO courseEditDTO = modelMapper.map(courseService.findById(id), CourseEditDTO.class);
-            modelAndView.addObject("course", courseEditDTO);
-            modelAndView.setViewName("courses/editCourse");
-        }catch (CourseNotFoundException ex){
-            modelAndView.setViewName("/error");
+        CourseDTO courseDTO = modelMapper.map(courseService.findById(id), CourseDTO.class);
+        modelAndView.addObject("courseId", id);
+        modelAndView.addObject("course", courseDTO);
+        modelAndView.setViewName("course/editCourse");
+        return modelAndView;
+    }
+
+    @PostMapping(value = "/courses/edit/{id}")
+    public ModelAndView editCourse(@Valid @ModelAttribute("course") CourseDTO courseDTO, @PathVariable(name = "id") Long id, BindingResult bindingResult) {
+        ModelAndView modelAndView = new ModelAndView();
+        if (bindingResult.hasErrors()) {
+            modelAndView.setViewName("course/editCourse");
+        } else {
+            courseService.updateCourse(id, courseDTO);
+            modelAndView.setViewName("redirect:/cms/courses");
         }
         return modelAndView;
     }
 
-    @PostMapping(value = "/courses/edit")
-    public ModelAndView editCourse(@Valid @ModelAttribute("course") CourseEditDTO courseDTO, BindingResult bindingResult){
+    @ExceptionHandler
+    public ModelAndView handleCourseNotFoundException(HttpServletRequest request, Exception ex){
+        logger.error(ExceptionLogGenerator.getRequestedUrlMessage(request.getRequestURL().toString()));
+        logger.error(ExceptionLogGenerator.getExceptionName(ex));
+
         ModelAndView modelAndView = new ModelAndView();
-        if (bindingResult.hasErrors()) {
-            modelAndView.setViewName("course/editCourse");
-        } else{
-            Course course = modelMapper.map(courseDTO, Course.class);
-            courseService.saveCourse(course);
-            modelAndView.setViewName("redirect:/cms/courses");
-        }
+        modelAndView.setViewName("resourceNotFound");
         return modelAndView;
     }
 }

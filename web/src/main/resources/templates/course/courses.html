@@ -36,9 +36,9 @@
             <td th:text="${course.getNumberOfSubjects()}"></td>
             <td th:text="${course.getNumberOfBatches()}"></td>
             <td>
-                <!--<a th:href="@{/cms/courses/edit/{id}(id = ${course.getId()})}">-->
-                    <!--<button class="btn btn-secondary" th:text="Edit"></button>-->
-                <!--</a>-->
+                <a th:href="@{/cms/courses/edit/{id}(id = ${course.getId()})}">
+                    <button class="btn btn-secondary" th:text="Edit"></button>
+                </a>
                 <a th:href="@{/cms/courses/delete/{id}(id = ${course.getId()})}" onclick="return confirm('Are you sure?')">
                     <button class="btn btn-danger" th:text="Delete"></button>
                 </a>

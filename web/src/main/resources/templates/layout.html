@@ -42,6 +42,18 @@
                     </ul>
                 </li>
                 <li sec:authorize="hasAuthority('STAFF')">
+                    <a href="#courseSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Course
+                        Management</a>
+                    <ul class="collapse list-unstyled" id="courseSubmenu">
+                        <li>
+                            <a th:href="@{/cms/courses}">Course list</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/cms/courses/add}">Add course</a>
+                        </li>
+                    </ul>
+                </li>
+                <li sec:authorize="hasAuthority('STAFF')">
                     <a href="#teacherSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Teacher
                         Management</a>
                     <ul class="collapse list-unstyled" id="teacherSubmenu">

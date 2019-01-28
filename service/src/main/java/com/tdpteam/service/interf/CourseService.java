@@ -1,7 +1,9 @@
 package com.tdpteam.service.interf;
 
+import com.tdpteam.repo.dto.course.CourseDTO;
 import com.tdpteam.repo.dto.course.CourseListItemDTO;
 import com.tdpteam.repo.entity.Course;
+import org.springframework.scheduling.annotation.Async;
 
 import java.util.List;
 
@@ -11,4 +13,7 @@ public interface CourseService {
     void saveCourse(Course course);
 
     Course findById(Long id);
+
+    @Async
+    void updateCourse(Long id, CourseDTO courseDTO);
 }

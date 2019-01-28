@@ -11,7 +11,7 @@
 <div layout:fragment="content">
     <div class="row">
         <div class="col-md-6 col-md-offset-3" style="margin: 0 auto">
-            <form autocomplete="off" action="#" th:action="@{/cms/courses/edit/{id}(id = ${course.getId()})}"
+            <form autocomplete="off" action="#" th:action="@{/cms/courses/edit/{id}(id = ${courseId})}"
                   th:object="${course}" method="post" class="form-horizontal"
                   role="form">
                 <div class="form-group">

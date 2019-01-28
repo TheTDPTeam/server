@@ -1,4 +1,4 @@
-package com.tdpteam.service.exception;
+package com.tdpteam.service.exception.user;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

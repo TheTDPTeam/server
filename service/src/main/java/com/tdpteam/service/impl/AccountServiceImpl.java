@@ -2,7 +2,7 @@ package com.tdpteam.service.impl;
 
 import com.tdpteam.repo.dto.account.AccountListItemDTO;
 import com.tdpteam.repo.entity.user.UserDetail;
-import com.tdpteam.service.exception.UserNotFoundException;
+import com.tdpteam.service.exception.user.UserNotFoundException;
 import com.tdpteam.service.helper.Constants;
 import com.tdpteam.repo.entity.user.Account;
 import com.tdpteam.repo.repository.AccountRepository;
