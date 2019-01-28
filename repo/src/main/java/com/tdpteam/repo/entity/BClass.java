@@ -34,6 +34,6 @@ public class BClass extends BaseEntityAudit {
     @JoinColumn(name = "subject_id", nullable = false)
     private Subject subject;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "bClass", optional = false)
-    private Attendance attendance;
+    @OneToMany(mappedBy = "bClass")
+    private Set<Attendance> attendance;
 }
