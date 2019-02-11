@@ -16,4 +16,5 @@ public class CourseListItemDTO {
     private int numberOfSemester;
     private int numberOfSubjects;
     private int numberOfBatches;
+    private boolean isActivated;
 }

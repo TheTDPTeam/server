@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Data
 @Entity
 @Table(name = "account")
@@ -32,9 +32,6 @@ public class Account extends BaseEntityAudit implements UserDetails {
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "account")
     private Teacher teacher;
-
-    @Column
-    private boolean isActivated;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "role_id", nullable = false)

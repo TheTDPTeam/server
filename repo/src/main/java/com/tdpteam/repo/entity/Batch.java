@@ -13,7 +13,7 @@ import java.util.Set;
 @Entity
 @Table(name = "batch")
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 public class Batch extends BaseEntityAudit {
     @Column
     private String name;

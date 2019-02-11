@@ -72,7 +72,6 @@ public class AccountServiceImpl implements AccountService {
         user.setPassword(bCryptPasswordEncoder.encode(generatedPassword));
         String emailContent = generateAccountCreationMailContent(user.getUserDetail().getFirstName(), user.getEmail(), generatedPassword);
         mailService.sendMail(user.getEmail(), Constants.ACCOUNT_CREATION_EMAIL_SUBJECT, emailContent);
-        System.out.println(user.getPassword());
         user.setActivated(true);
         return accountRepository.save(user);
     }
@@ -89,7 +88,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void changeAccountActivation(Long id) {
+    public void changeActivation(Long id) {
         Optional<Account> optionalAccount = accountRepository.findById(id);
         if (optionalAccount.isPresent()) {
             Account account = optionalAccount.get();

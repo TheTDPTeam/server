@@ -80,7 +80,7 @@ public class AccountController {
 
     @GetMapping("/accounts/changeActivation/{id}")
     public String changeActivation(@PathVariable(name = "id") Long id){
-        accountService.changeAccountActivation(id);
+        accountService.changeActivation(id);
         return "redirect:/accounts";
     }
 }

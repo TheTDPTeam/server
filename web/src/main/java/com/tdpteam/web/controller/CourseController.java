@@ -67,7 +67,9 @@ public class CourseController {
     @GetMapping(value = "/courses/edit/{id}")
     public ModelAndView getEditCourseView(@PathVariable(name = "id") Long id) {
         ModelAndView modelAndView = new ModelAndView();
-        CourseDTO courseDTO = modelMapper.map(courseService.findById(id), CourseDTO.class);
+        Course course = courseService.findById(id);
+        CourseDTO courseDTO = modelMapper.map(course, CourseDTO.class);
+        courseDTO.setIsActivated(course.isActivated());
         modelAndView.addObject("courseId", id);
         modelAndView.addObject("course", courseDTO);
         modelAndView.setViewName("course/editCourse");
@@ -80,10 +82,17 @@ public class CourseController {
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName("course/editCourse");
         } else {
+            System.out.println(courseDTO);
             courseService.updateCourse(id, courseDTO);
             modelAndView.setViewName("redirect:/cms/courses");
         }
         return modelAndView;
+    }
+
+    @GetMapping(value = "/courses/delete/{id}")
+    public String deleteCourse(@PathVariable(name = "id") Long id){
+        courseService.deleteCourse(id);
+        return "redirect:/cms/courses";
     }
 
     @ExceptionHandler

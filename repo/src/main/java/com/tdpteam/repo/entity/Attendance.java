@@ -4,14 +4,12 @@ import com.tdpteam.repo.entity.base.BaseEntity;
 import com.tdpteam.repo.entity.user.Student;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NonNull;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Table(name = "attendance")
 public class Attendance extends BaseEntity {
 

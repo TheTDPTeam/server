@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Table(name = "semester")
 public class Semester extends BaseEntityAudit {
     @Column

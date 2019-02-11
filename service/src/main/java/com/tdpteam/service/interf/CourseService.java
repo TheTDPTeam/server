@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.Async;
 
 import java.util.List;
 
-public interface CourseService {
+public interface CourseService extends ActivationService{
     List<CourseListItemDTO> getAllCourses();
 
     void saveCourse(Course course);
@@ -16,4 +16,7 @@ public interface CourseService {
 
     @Async
     void updateCourse(Long id, CourseDTO courseDTO);
+
+    @Async
+    void deleteCourse(Long id);
 }

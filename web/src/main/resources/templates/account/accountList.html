@@ -23,8 +23,8 @@
             <th scope="col">First name</th>
             <th scope="col">Last name</th>
             <th scope="col">Created at</th>
-            <th scope="col">Is activated</th>
             <th scope="col">Role</th>
+            <th scope="col">Is activated</th>
             <th scope="col">Actions</th>
         </tr>
         </thead>
@@ -36,8 +36,8 @@
             <td th:text="${account.getUserDetail().getFirstName()}"></td>
             <td th:text="${account.getUserDetail().getLastName()}"></td>
             <td th:text="${#dates.format(account.getCreatedAt(),'MMM dd, yyyy')}"></td>
-            <td th:text="${account.isActivated()?'Activated':'Deactivated'}" th:style="'color:' + ${account.isActivated() ? '#28a745':'#ffc107'}"></td>
             <td th:text="${account.getRole().getRole()}"></td>
+            <td th:text="${account.isActivated()?'Activated':'Deactivated'}" th:style="'color:' + ${account.isActivated() ? '#28a745':'#ffc107'}"></td>
             <td>
                 <a th:href="@{/accounts/changeActivation/{id}(id = ${account.getId()})}">
                     <button class="btn" th:classappend="${account.isActivated()} ? 'btn-warning' : 'btn-success'"

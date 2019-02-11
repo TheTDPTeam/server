@@ -40,6 +40,7 @@ public class CourseServiceImpl implements CourseService {
                         .numberOfSemester(course.getSemesters().size())
                         .numberOfBatches(course.getBatches().size())
                         .numberOfSubjects(semesterRepository.countByCourse(course))
+                        .isActivated(course.isActivated())
                         .build()));
         return courseListItemDTOS;
     }
@@ -63,8 +64,28 @@ public class CourseServiceImpl implements CourseService {
         Optional<Course> optionalCourse = courseRepository.findById(id);
         if(optionalCourse.isPresent()){
             Course course = optionalCourse.get();
+            System.out.println(courseDTO.getIsActivated());
             modelMapper.map(courseDTO, course);
+            System.out.println(courseDTO.getIsActivated());
+            System.out.println(course.isActivated());
             saveCourse(course);
+        }
+    }
+
+    @Override
+    public void deleteCourse(Long id) {
+        try{
+            courseRepository.deleteById(id);
+        }catch (Exception ignored){}
+    }
+
+    @Override
+    public void changeActivation(Long id) {
+        Optional<Course> optionalAccount = courseRepository.findById(id);
+        if (optionalAccount.isPresent()) {
+            Course course = optionalAccount.get();
+            course.setActivated(!course.isActivated());
+            courseRepository.save(course);
         }
     }
 }

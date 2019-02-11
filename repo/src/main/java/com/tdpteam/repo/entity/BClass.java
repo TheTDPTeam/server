@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Table(name = "bClass")
 public class BClass extends BaseEntityAudit {
     @Column
