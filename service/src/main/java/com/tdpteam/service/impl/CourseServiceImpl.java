@@ -1,11 +1,13 @@
 package com.tdpteam.service.impl;
 
 import com.tdpteam.repo.dto.course.CourseDTO;
+import com.tdpteam.repo.dto.course.CourseDetailDTO;
 import com.tdpteam.repo.dto.course.CourseListItemDTO;
 import com.tdpteam.repo.entity.Course;
 import com.tdpteam.repo.repository.CourseRepository;
 import com.tdpteam.repo.repository.SemesterRepository;
 import com.tdpteam.service.exception.course.CourseNotFoundException;
+import com.tdpteam.service.helper.Constants;
 import com.tdpteam.service.interf.CourseService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,10 +66,7 @@ public class CourseServiceImpl implements CourseService {
         Optional<Course> optionalCourse = courseRepository.findById(id);
         if(optionalCourse.isPresent()){
             Course course = optionalCourse.get();
-            System.out.println(courseDTO.getIsActivated());
             modelMapper.map(courseDTO, course);
-            System.out.println(courseDTO.getIsActivated());
-            System.out.println(course.isActivated());
             saveCourse(course);
         }
     }
@@ -77,6 +76,22 @@ public class CourseServiceImpl implements CourseService {
         try{
             courseRepository.deleteById(id);
         }catch (Exception ignored){}
+    }
+
+    @Override
+    public CourseDetailDTO getCourseDetails(Long id) {
+        Optional<Course> optionalCourse = courseRepository.findById(id);
+        if(!optionalCourse.isPresent()){
+            throw new CourseNotFoundException(id);
+        }
+        Course course = optionalCourse.get();
+        return CourseDetailDTO.builder()
+                .name(course.getName())
+                .code(course.getCode())
+                .isActivated(course.isActivated())
+                .batchSet(course.getBatches())
+                .semesterSet(course.getSemesters())
+                .build();
     }
 
     @Override

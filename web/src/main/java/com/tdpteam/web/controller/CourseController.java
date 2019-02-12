@@ -1,6 +1,7 @@
 package com.tdpteam.web.controller;
 
 import com.tdpteam.repo.dto.course.CourseDTO;
+import com.tdpteam.repo.dto.course.CourseDetailDTO;
 import com.tdpteam.repo.dto.course.CourseListItemDTO;
 import com.tdpteam.repo.entity.Course;
 import com.tdpteam.service.helper.ExceptionLogGenerator;
@@ -42,6 +43,15 @@ public class CourseController {
         return modelAndView;
     }
 
+    @GetMapping(value = "/courses/{id}")
+    public ModelAndView getCourseById(@PathVariable(name = "id") Long id){
+        ModelAndView modelAndView = new ModelAndView();
+        CourseDetailDTO courseDetailDTO = courseService.getCourseDetails(id);
+        modelAndView.addObject("course", courseDetailDTO);
+        modelAndView.setViewName("course/courseDetail");
+        return modelAndView;
+    }
+
     @GetMapping(value = "/courses/add")
     public ModelAndView showAddCourseView() {
         ModelAndView modelAndView = new ModelAndView();
@@ -77,7 +87,9 @@ public class CourseController {
     }
 
     @PostMapping(value = "/courses/edit/{id}")
-    public ModelAndView editCourse(@Valid @ModelAttribute("course") CourseDTO courseDTO, @PathVariable(name = "id") Long id, BindingResult bindingResult) {
+    public ModelAndView editCourse(@Valid @ModelAttribute("course") CourseDTO courseDTO,
+                                   @PathVariable(name = "id") Long id,
+                                   BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName("course/editCourse");
@@ -87,6 +99,12 @@ public class CourseController {
             modelAndView.setViewName("redirect:/cms/courses");
         }
         return modelAndView;
+    }
+
+    @GetMapping("/courses/changeActivation/{id}")
+    public String changeActivation(@PathVariable(name = "id") Long id){
+        courseService.changeActivation(id);
+        return "redirect:/cms/courses";
     }
 
     @GetMapping(value = "/courses/delete/{id}")

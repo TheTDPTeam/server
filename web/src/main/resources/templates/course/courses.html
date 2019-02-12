@@ -6,6 +6,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Course list</title>
+    <script>
+        function navigateToCourseDetail(id) {
+            window.location.href = "/cms/courses/" + id;
+        }
+    </script>
 </head>
 <body>
 <div layout:fragment="content">
@@ -30,7 +35,7 @@
         </thead>
         <tbody>
 
-        <tr th:each="course: ${courses}">
+        <tr th:each="course: ${courses}" th:onclick="'navigateToCourseDetail(\''+ ${course.getId()} + '\');'">
             <th scope="row" th:text="${course.getId()}"></th>
             <td th:text="${course.getName()}"></td>
             <td th:text="${course.getCode()}"></td>
