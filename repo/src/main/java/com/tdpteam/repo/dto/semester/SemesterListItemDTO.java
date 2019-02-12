@@ -1,4 +1,4 @@
-package com.tdpteam.repo.dto.course;
+package com.tdpteam.repo.dto.semester;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,12 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CourseListItemDTO {
+public class SemesterListItemDTO {
     private Long id;
     private String name;
-    private String code;
-    private int numberOfSemesters;
+    private String courseCode;
     private int numberOfSubjects;
-    private int numberOfBatches;
     private boolean isActivated;
 }

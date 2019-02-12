@@ -3,6 +3,7 @@ package com.tdpteam.service.interf;
 import com.tdpteam.repo.dto.course.CourseDTO;
 import com.tdpteam.repo.dto.course.CourseDetailDTO;
 import com.tdpteam.repo.dto.course.CourseListItemDTO;
+import com.tdpteam.repo.dto.course.CourseSelectionItemDTO;
 import com.tdpteam.repo.entity.Course;
 import org.springframework.scheduling.annotation.Async;
 
@@ -22,4 +23,6 @@ public interface CourseService extends ActivationService{
     void deleteCourse(Long id);
 
     CourseDetailDTO getCourseDetails(Long id);
+
+    List<CourseSelectionItemDTO> getAllCoursesForSelection();
 }

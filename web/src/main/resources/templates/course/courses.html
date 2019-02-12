@@ -26,7 +26,7 @@
             <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Code</th>
-            <th scope="col">Number of Semester</th>
+            <th scope="col">Number of Semesters</th>
             <th scope="col">Number of Subjects</th>
             <th scope="col">Number of Batches</th>
             <th scope="col">Is activated</th>
@@ -39,12 +39,12 @@
             <th scope="row" th:text="${course.getId()}"></th>
             <td th:text="${course.getName()}"></td>
             <td th:text="${course.getCode()}"></td>
-            <td th:text="${course.getNumberOfSemester()}"></td>
+            <td th:text="${course.getNumberOfSemesters()}"></td>
             <td th:text="${course.getNumberOfSubjects()}"></td>
             <td th:text="${course.getNumberOfBatches()}"></td>
             <td th:text="${course.isActivated()?'Activated':'Deactivated'}" th:style="'color:' + ${course.isActivated() ? '#28a745':'#ffc107'}"></td>
             <td>
-                <a th:href="@{/courses/changeActivation/{id}(id = ${course.getId()})}">
+                <a th:href="@{/cms/courses/changeActivation/{id}(id = ${course.getId()})}">
                     <button class="btn" th:classappend="${course.isActivated()} ? 'btn-warning' : 'btn-success'"
                             th:text="${course.isActivated()?'Deactivate':'Activate'}"></button>
                 </a>

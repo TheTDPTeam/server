@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Semester list</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <a th:href="@{/cms/semesters/add}">
+        <button class="btn btn-primary">
+            Add a new semester
+        </button>
+    </a>
+    <br/>
+    <table class="table table-striped table-responsive-md">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Course</th>
+            <th scope="col">Number of Subjects</th>
+            <th scope="col">Is activated</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each="semester: ${semesters}" th:onclick="'navigateToSemesterDetail(\''+ ${semester.getId()} + '\');'">
+            <th scope="row" th:text="${semester.getId()}"></th>
+            <td th:text="${semester.getName()}"></td>
+            <td th:text="${semester.getCourseCode()}"></td>
+            <td th:text="${semester.getNumberOfSubjects()}"></td>
+            <td th:text="${semester.isActivated()?'Activated':'Deactivated'}" th:style="'color:' + ${semester.isActivated() ? '#28a745':'#ffc107'}"></td>
+            <td>
+                <a th:href="@{/cms/semesters/changeActivation/{id}(id = ${semester.getId()})}">
+                    <button class="btn" th:classappend="${semester.isActivated()} ? 'btn-warning' : 'btn-success'"
+                            th:text="${semester.isActivated()?'Deactivate':'Activate'}"></button>
+                </a>
+                <a th:href="@{/cms/semesters/edit/{id}(id = ${semester.getId()})}">
+                    <button class="btn btn-secondary" th:text="Edit"></button>
+                </a>
+                <a th:href="@{/cms/semesters/delete/{id}(id = ${semester.getId()})}" onclick="return confirm('Are you sure?')">
+                    <button class="btn btn-danger" th:text="Delete"></button>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

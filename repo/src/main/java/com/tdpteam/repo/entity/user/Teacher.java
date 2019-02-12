@@ -1,5 +1,6 @@
 package com.tdpteam.repo.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tdpteam.repo.entity.BClass;
 import lombok.Data;
 import lombok.NonNull;
@@ -22,5 +23,6 @@ public class Teacher {
     private Account account;
 
     @OneToMany(mappedBy = "teacher")
+    @JsonManagedReference
     private Set<BClass> bClasses;
 }

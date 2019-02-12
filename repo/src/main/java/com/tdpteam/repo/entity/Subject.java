@@ -3,6 +3,7 @@ package com.tdpteam.repo.entity;
 import com.tdpteam.repo.entity.base.BaseEntityAudit;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -10,7 +11,8 @@ import java.util.Set;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = false)
+@ToString(exclude = "bClasses")
+@EqualsAndHashCode(callSuper = false, exclude = "bClasses")
 @Table(name = "subject")
 public class Subject extends BaseEntityAudit {
     @Column
@@ -20,7 +22,7 @@ public class Subject extends BaseEntityAudit {
     private String description;
 
     @Column
-    private int order;
+    private int subjectOrder;
 
     @Column
     private int numberOfSection;
