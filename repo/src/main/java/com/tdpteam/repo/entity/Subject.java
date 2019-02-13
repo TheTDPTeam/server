@@ -25,7 +25,7 @@ public class Subject extends BaseEntityAudit {
     private int subjectOrder;
 
     @Column
-    private int numberOfSection;
+    private int numberOfLessons;
 
     @Column
     private boolean hasTheoryExamination = true;

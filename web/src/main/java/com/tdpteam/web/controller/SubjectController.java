@@ -3,8 +3,6 @@ package com.tdpteam.web.controller;
 import com.tdpteam.repo.dto.semester.SemesterSelectionItemDTO;
 import com.tdpteam.repo.dto.subject.SubjectDTO;
 import com.tdpteam.repo.dto.subject.SubjectListItemDTO;
-import com.tdpteam.repo.entity.Semester;
-import com.tdpteam.repo.entity.Subject;
 import com.tdpteam.service.interf.SemesterService;
 import com.tdpteam.service.interf.SubjectService;
 import org.modelmapper.ModelMapper;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -26,8 +23,9 @@ public class SubjectController {
     private ModelMapper modelMapper;
 
     @Autowired
-    public SubjectController(SubjectService subjectService, ModelMapper modelMapper) {
+    public SubjectController(SubjectService subjectService, SemesterService semesterService, ModelMapper modelMapper) {
         this.subjectService = subjectService;
+        this.semesterService = semesterService;
         this.modelMapper = modelMapper;
     }
 
@@ -52,13 +50,15 @@ public class SubjectController {
     }
 
     @PostMapping(value = "/subjects/add")
-    public ModelAndView addCourse(@Valid @ModelAttribute("subject") SubjectDTO subjectDTO, BindingResult bindingResult) {
+    public ModelAndView addSubject(@Valid @ModelAttribute("subject") SubjectDTO subjectDTO, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
         if (bindingResult.hasErrors()) {
+            List<SemesterSelectionItemDTO> semesterSelectionItemDTO = semesterService.getAllSemestersForSelection();
+            modelAndView.addObject("selectedSemesterId", subjectDTO.getSemesterId());
+            modelAndView.addObject("semesters", semesterSelectionItemDTO);
             modelAndView.setViewName("subject/addSubject");
         } else {
-            Subject subject = modelMapper.map(subjectDTO, Subject.class);
-            subjectService.saveSubject(subject);
+            subjectService.saveSubject(subjectDTO);
             modelAndView.setViewName("redirect:/cms/subjects");
         }
         return modelAndView;
