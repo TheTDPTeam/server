@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Teacher list</title>
+    <script>
+        function navigateToTeacherDetail(id) {
+            window.location.href = "/cms/teachers/" + id;
+        }
+    </script>
+</head>
+<body>
+<div layout:fragment="content">
+    <table class="table table-striped table-responsive-md">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Order</th>
+            <th scope="col">Semester</th>
+            <th scope="col">Course</th>
+            <th scope="col">Is activated</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each="subject: ${subjects}" th:onclick="'navigateToSubjectDetail(\''+ ${subject.getId()} + '\');'">
+            <th scope="row" th:text="${subject.getId()}"></th>
+            <td th:text="${subject.getName()}"></td>
+            <td th:text="${subject.getSubjectOrder()}"></td>
+            <td th:text="${subject.getSemesterName()}"></td>
+            <td th:text="${subject.getCourseCode()}"></td>
+            <td th:text="${subject.isActivated()?'Activated':'Deactivated'}" th:style="'color:' + ${subject.isActivated() ? '#28a745':'#ffc107'}"></td>
+            <td>
+                <a th:href="@{/cms/subjects/changeActivation/{id}(id = ${subject.getId()})}">
+                    <button class="btn" th:classappend="${subject.isActivated()} ? 'btn-warning' : 'btn-success'"
+                            th:text="${subject.isActivated()?'Deactivate':'Activate'}"></button>
+                </a>
+                <a th:href="@{/cms/subjects/edit/{id}(id = ${subject.getId()})}">
+                    <button class="btn btn-secondary" th:text="Edit"></button>
+                </a>
+                <a th:href="@{/cms/subjects/delete/{id}(id = ${subject.getId()})}" onclick="return confirm('Are you sure?')">
+                    <button class="btn btn-danger" th:text="Delete"></button>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

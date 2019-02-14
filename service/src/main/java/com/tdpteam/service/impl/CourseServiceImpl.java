@@ -1,15 +1,13 @@
 package com.tdpteam.service.impl;
 
+import com.tdpteam.repo.dto.SelectionItem;
 import com.tdpteam.repo.dto.course.CourseDTO;
 import com.tdpteam.repo.dto.course.CourseDetailDTO;
 import com.tdpteam.repo.dto.course.CourseListItemDTO;
-import com.tdpteam.repo.dto.course.CourseSelectionItemDTO;
 import com.tdpteam.repo.entity.Course;
-import com.tdpteam.repo.entity.Semester;
 import com.tdpteam.repo.repository.CourseRepository;
 import com.tdpteam.repo.repository.SemesterRepository;
 import com.tdpteam.service.exception.course.CourseNotFoundException;
-import com.tdpteam.service.helper.Constants;
 import com.tdpteam.service.interf.CourseService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,18 +16,15 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class CourseServiceImpl implements CourseService {
     private CourseRepository courseRepository;
-    private SemesterRepository semesterRepository;
     private ModelMapper modelMapper;
 
     @Autowired
-    public CourseServiceImpl(CourseRepository courseRepository, SemesterRepository semesterRepository, ModelMapper modelMapper) {
+    public CourseServiceImpl(CourseRepository courseRepository, ModelMapper modelMapper) {
         this.courseRepository = courseRepository;
-        this.semesterRepository = semesterRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -104,11 +99,11 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<CourseSelectionItemDTO> getAllCoursesForSelection() {
+    public List<SelectionItem> getAllCoursesForSelection() {
         List<Course> courses = courseRepository.findAllByOrderByCreatedAtDesc();
-        List<CourseSelectionItemDTO> courseListItemDTOS = new ArrayList<>();
+        List<SelectionItem> courseListItemDTOS = new ArrayList<>();
         courses.forEach(course -> courseListItemDTOS.add(
-                new CourseSelectionItemDTO(course.getId(), course.getCode())
+                new SelectionItem(course.getId(), course.getCode())
         ));
         return courseListItemDTOS;
     }

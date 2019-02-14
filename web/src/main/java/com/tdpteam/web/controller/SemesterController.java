@@ -1,6 +1,6 @@
 package com.tdpteam.web.controller;
 
-import com.tdpteam.repo.dto.course.CourseSelectionItemDTO;
+import com.tdpteam.repo.dto.SelectionItem;
 import com.tdpteam.repo.dto.semester.SemesterDTO;
 import com.tdpteam.repo.dto.semester.SemesterListItemDTO;
 import com.tdpteam.repo.entity.Course;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -49,14 +48,13 @@ public class SemesterController {
     public ModelAndView showAddSemesterView(@RequestParam(value = "courseId", required = false) Long courseId) {
         ModelAndView modelAndView = new ModelAndView();
         SemesterDTO semesterDTO = new SemesterDTO();
-        List<CourseSelectionItemDTO> courseSelectionItemDTO = courseService.getAllCoursesForSelection();
         if(courseId != null){
             modelAndView.addObject("courseId", courseId);
             Course course = courseService.findById(courseId);
             modelAndView.addObject("newSemesterName", "Semester " + (course.getSemesters().size() + 1));
         }
         modelAndView.addObject("semester", semesterDTO);
-        modelAndView.addObject("courses", courseSelectionItemDTO);
+        modelAndView.addObject("courses", courseService.getAllCoursesForSelection());
         modelAndView.setViewName("semester/addSemester");
         return modelAndView;
     }

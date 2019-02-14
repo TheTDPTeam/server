@@ -1,11 +1,13 @@
 package com.tdpteam.service.impl;
 
+import com.tdpteam.repo.dto.SelectionItem;
 import com.tdpteam.repo.dto.subject.SubjectDTO;
 import com.tdpteam.repo.dto.subject.SubjectListItemDTO;
 import com.tdpteam.repo.entity.Semester;
 import com.tdpteam.repo.entity.Subject;
 import com.tdpteam.repo.repository.SemesterRepository;
 import com.tdpteam.repo.repository.SubjectRepository;
+import com.tdpteam.service.exception.subject.SubjectNotFoundException;
 import com.tdpteam.service.interf.SubjectService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +32,9 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public void deleteSubject(Long id) {
-
+        try {
+            subjectRepository.deleteById(id);
+        } catch (Exception ignored) {}
     }
 
     @Override
@@ -38,8 +42,10 @@ public class SubjectServiceImpl implements SubjectService {
         Subject subject = modelMapper.map(subjectDTO, Subject.class);
         Optional<Semester> optionalSemester = semesterRepository.findById(subjectDTO.getSemesterId());
         if(optionalSemester.isPresent()){
-           subject.setSemester(optionalSemester.get());
-           subjectRepository.save(subject);
+            Semester semester = optionalSemester.get();
+            subject.setSubjectOrder(semester.getSubjects().size() + 1);
+            subject.setSemester(semester);
+            subjectRepository.save(subject);
         }
     }
 
@@ -58,6 +64,16 @@ public class SubjectServiceImpl implements SubjectService {
                         .build()
         ));
         return subjectListItemDTOList;
+    }
+
+    @Override
+    public List<SelectionItem> getAllSubjectsForSelection() {
+        List<Subject> subjects = subjectRepository.findAllByOrderBySemesterDesc();
+        List<SelectionItem> courseListItemDTOS = new ArrayList<>();
+        subjects.forEach(subject -> courseListItemDTOS.add(
+                new SelectionItem(subject.getId(), subject.getName())
+        ));
+        return courseListItemDTOS;
     }
 
     @Override

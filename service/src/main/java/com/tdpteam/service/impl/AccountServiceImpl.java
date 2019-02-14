@@ -1,7 +1,9 @@
 package com.tdpteam.service.impl;
 
+import com.tdpteam.repo.dto.account.AccountCreationDTO;
 import com.tdpteam.repo.dto.account.AccountListItemDTO;
 import com.tdpteam.repo.entity.user.UserDetail;
+import com.tdpteam.repo.repository.RoleRepository;
 import com.tdpteam.service.exception.user.UserNotFoundException;
 import com.tdpteam.service.helper.Constants;
 import com.tdpteam.repo.entity.user.Account;
@@ -23,6 +25,7 @@ import java.util.Optional;
 @Service
 public class AccountServiceImpl implements AccountService {
     private AccountRepository accountRepository;
+    private RoleRepository roleRepository;
     private PasswordService passwordService;
     private MailService mailService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -32,11 +35,12 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     public AccountServiceImpl(AccountRepository accountRepository,
-                              PasswordService passwordService,
+                              RoleRepository roleRepository, PasswordService passwordService,
                               MailService mailService,
                               BCryptPasswordEncoder bCryptPasswordEncoder,
                               ModelMapper modelMapper, String emailTemplate) {
         this.accountRepository = accountRepository;
+        this.roleRepository = roleRepository;
         this.passwordService = passwordService;
         this.mailService = mailService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -102,5 +106,13 @@ public class AccountServiceImpl implements AccountService {
         try{
             accountRepository.deleteById(id);
         }catch (Exception ignored){}
+    }
+
+    @Override
+    public void createAccount(AccountCreationDTO accountCreationDTO) {
+        Account userAccount = modelMapper.map(accountCreationDTO, Account.class);
+        userAccount = updateUserDetail(accountCreationDTO, userAccount);
+        userAccount.setRole(roleRepository.findByRole(String.valueOf(accountCreationDTO.getRole())));
+        saveAccount(userAccount);
     }
 }

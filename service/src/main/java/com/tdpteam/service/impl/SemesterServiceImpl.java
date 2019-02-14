@@ -1,7 +1,7 @@
 package com.tdpteam.service.impl;
 
+import com.tdpteam.repo.dto.SelectionItem;
 import com.tdpteam.repo.dto.semester.SemesterListItemDTO;
-import com.tdpteam.repo.dto.semester.SemesterSelectionItemDTO;
 import com.tdpteam.repo.entity.Course;
 import com.tdpteam.repo.entity.Semester;
 import com.tdpteam.repo.repository.CourseRepository;
@@ -77,11 +77,11 @@ public class SemesterServiceImpl implements SemesterService {
     }
 
     @Override
-    public List<SemesterSelectionItemDTO> getAllSemestersForSelection() {
+    public List<SelectionItem> getAllSemestersForSelection() {
         List<Semester> semesters = semesterRepository.findAllByOrderByCourseDesc();
-        List<SemesterSelectionItemDTO> semesterSelectionItemDTOS = new ArrayList<>();
+        List<SelectionItem> semesterSelectionItemDTOS = new ArrayList<>();
         semesters.forEach(semester -> semesterSelectionItemDTOS.add(
-                new SemesterSelectionItemDTO(semester.getId(), semester.getName() + " of " + semester.getCourse().getCode())
+                new SelectionItem(semester.getId(), semester.getName() + " of " + semester.getCourse().getCode())
         ));
         return semesterSelectionItemDTOS;
     }

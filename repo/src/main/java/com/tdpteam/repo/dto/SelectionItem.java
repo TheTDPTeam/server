@@ -1,11 +1,13 @@
-package com.tdpteam.repo.dto.semester;
+package com.tdpteam.repo.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class SemesterSelectionItemDTO {
+@NoArgsConstructor
+public class SelectionItem {
     private Long id;
     private String displayName;
 }

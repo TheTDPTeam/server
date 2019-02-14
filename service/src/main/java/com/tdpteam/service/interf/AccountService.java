@@ -1,5 +1,6 @@
 package com.tdpteam.service.interf;
 
+import com.tdpteam.repo.dto.account.AccountCreationDTO;
 import com.tdpteam.repo.dto.account.AccountListItemDTO;
 import com.tdpteam.repo.entity.user.Account;
 import org.springframework.data.domain.Page;
@@ -13,4 +14,5 @@ public interface AccountService extends ActivationService{
     String generateAccountCreationMailContent(String firstName, String email, String password);
     Page<AccountListItemDTO> getPaginatedAccountList(Pageable pageable);
     void deleteAccount(Long id);
+    void createAccount(AccountCreationDTO accountCreationDTO);
 }

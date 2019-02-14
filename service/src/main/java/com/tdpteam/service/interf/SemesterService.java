@@ -1,7 +1,7 @@
 package com.tdpteam.service.interf;
 
+import com.tdpteam.repo.dto.SelectionItem;
 import com.tdpteam.repo.dto.semester.SemesterListItemDTO;
-import com.tdpteam.repo.dto.semester.SemesterSelectionItemDTO;
 import com.tdpteam.repo.entity.Semester;
 import org.springframework.scheduling.annotation.Async;
 
@@ -16,5 +16,5 @@ public interface SemesterService extends ActivationService{
     @Async
     void deleteSemester(Long id);
 
-    List<SemesterSelectionItemDTO> getAllSemestersForSelection();
+    List<SelectionItem> getAllSemestersForSelection();
 }

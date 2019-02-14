@@ -37,8 +37,7 @@ public class CourseController {
     @GetMapping(value = "/courses")
     public ModelAndView getAllCourses() {
         ModelAndView modelAndView = new ModelAndView();
-        List<CourseListItemDTO> courseListItemDTOList = courseService.getAllCourses();
-        modelAndView.addObject("courses", courseListItemDTOList);
+        modelAndView.addObject("courses", courseService.getAllCourses());
         modelAndView.setViewName("course/courses");
         return modelAndView;
     }
@@ -46,8 +45,7 @@ public class CourseController {
     @GetMapping(value = "/courses/{id}")
     public ModelAndView getCourseById(@PathVariable(name = "id") Long id){
         ModelAndView modelAndView = new ModelAndView();
-        CourseDetailDTO courseDetailDTO = courseService.getCourseDetails(id);
-        modelAndView.addObject("course", courseDetailDTO);
+        modelAndView.addObject("course", courseService.getCourseDetails(id));
         modelAndView.setViewName("course/courseDetail");
         return modelAndView;
     }
@@ -55,8 +53,7 @@ public class CourseController {
     @GetMapping(value = "/courses/add")
     public ModelAndView showAddCourseView() {
         ModelAndView modelAndView = new ModelAndView();
-        CourseDTO courseDTO = new CourseDTO();
-        modelAndView.addObject("course", courseDTO);
+        modelAndView.addObject("course", new CourseDTO());
         modelAndView.setViewName("course/addCourse");
         return modelAndView;
     }
@@ -94,7 +91,6 @@ public class CourseController {
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName("course/editCourse");
         } else {
-            System.out.println(courseDTO);
             courseService.updateCourse(id, courseDTO);
             modelAndView.setViewName("redirect:/cms/courses");
         }

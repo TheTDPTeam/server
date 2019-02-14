@@ -49,55 +49,31 @@
                             <a th:href="@{/cms/courses}">Course list</a>
                         </li>
                         <li>
-                            <a th:href="@{/cms/courses/add}">Add course</a>
-                        </li>
-                    </ul>
-                </li>
-                <li sec:authorize="hasAuthority('STAFF')">
-                    <a href="#semesterSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Semester
-                        Management</a>
-                    <ul class="collapse list-unstyled" id="semesterSubmenu">
-                        <li>
                             <a th:href="@{/cms/semesters}">Semester list</a>
                         </li>
-                        <li>
-                            <a th:href="@{/cms/semesters/add}">Add semester</a>
-                        </li>
-                    </ul>
-                </li>
-                <li sec:authorize="hasAuthority('STAFF')">
-                    <a href="#subjectSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Subject
-                        Management</a>
-                    <ul class="collapse list-unstyled" id="subjectSubmenu">
                         <li>
                             <a th:href="@{/cms/subjects}">Subject list</a>
                         </li>
                         <li>
-                            <a th:href="@{/cms/subjects/add}">Add subject</a>
+                            <a th:href="@{/cms/batches}">Batch list</a>
                         </li>
                     </ul>
                 </li>
                 <li sec:authorize="hasAuthority('STAFF')">
-                    <a href="#teacherSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Teacher
+                    <a href="#classSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Class
                         Management</a>
-                    <ul class="collapse list-unstyled" id="teacherSubmenu">
+                    <ul class="collapse list-unstyled" id="classSubmenu">
                         <li>
                             <a th:href="@{/cms/teachers}">Teacher list</a>
                         </li>
                         <li>
-                            <a th:href="@{/cms/teachers/add}">Add teacher</a>
-                        </li>
-                    </ul>
-                </li>
-                <li sec:authorize="hasAuthority('STAFF')">
-                    <a href="#studentSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Student
-                        Management</a>
-                    <ul class="collapse list-unstyled" id="studentSubmenu">
-                        <li>
                             <a th:href="@{/cms/students}">Student list</a>
                         </li>
                         <li>
-                            <a th:href="@{/cms/students/add}">Add student</a>
+                            <a th:href="@{/cms/classes}">Class list</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/cms/attendances}">Attendance management</a>
                         </li>
                     </ul>
                 </li>

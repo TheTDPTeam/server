@@ -1,6 +1,5 @@
 package com.tdpteam.repo.dto.course;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
