@@ -15,4 +15,5 @@ public class StudentListItemDTO {
     private String email;
     private String batchName;
     private int numberOfClasses;
+    private boolean isActivated;
 }

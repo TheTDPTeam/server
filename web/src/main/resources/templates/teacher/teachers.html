@@ -26,7 +26,7 @@
         <tbody>
 
         <tr th:each="teacher: ${teachers}" th:onclick="'navigateToTeacherDetail(\''+ ${teacher.getId()} + '\');'">
-            <th scope="row" th:text="${teacher.getId()}"></th>
+            <th scope="row" th:text="${teachers.indexOf(teacher) + 1}"></th>
             <td th:text="${teacher.getFullName()}"></td>
             <td th:text="${teacher.getNumberOfClasses()}"></td>
             <td th:text="${teacher.isActivated()?'Activated':'Deactivated'}" th:style="'color:' + ${teacher.isActivated() ? '#28a745':'#ffc107'}"></td>

@@ -24,13 +24,13 @@ public class Account extends BaseEntityAudit implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "account", optional = false)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "account", optional = false, orphanRemoval = true)
     private UserDetail userDetail;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "account")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "account", orphanRemoval = true)
     private Student student;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "account")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "account", orphanRemoval = true)
     private Teacher teacher;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

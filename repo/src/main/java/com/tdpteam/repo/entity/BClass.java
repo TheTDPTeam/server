@@ -7,14 +7,17 @@ import com.tdpteam.repo.entity.user.Student;
 import com.tdpteam.repo.entity.user.Teacher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = false)
+@ToString(exclude = {"attendances", "students"})
+@EqualsAndHashCode(callSuper = false, exclude = {"attendances","students"})
 @Table(name = "bClass")
 public class BClass extends BaseEntityAudit {
     @Column
@@ -39,7 +42,11 @@ public class BClass extends BaseEntityAudit {
     @JsonBackReference
     private Subject subject;
 
+    @Column
+    private Date startDate;
+    @Column
+    private Date estimatedEndDate;
+
     @OneToMany(mappedBy = "bClass")
-    @JsonManagedReference
-    private Set<Attendance> attendance = new HashSet<>();
+    private Set<Attendance> attendances = new HashSet<>();
 }

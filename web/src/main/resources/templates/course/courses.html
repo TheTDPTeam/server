@@ -36,7 +36,7 @@
         <tbody>
 
         <tr th:each="course: ${courses}" th:onclick="'navigateToCourseDetail(\''+ ${course.getId()} + '\');'">
-            <th scope="row" th:text="${course.getId()}"></th>
+            <th scope="row" th:text="${courses.indexOf(course) + 1}"></th>
             <td th:text="${course.getName()}"></td>
             <td th:text="${course.getCode()}"></td>
             <td th:text="${course.getNumberOfSemesters()}"></td>
@@ -51,7 +51,9 @@
                 <a th:href="@{/cms/courses/edit/{id}(id = ${course.getId()})}">
                     <button class="btn btn-secondary" th:text="Edit"></button>
                 </a>
-                <a th:href="@{/cms/courses/delete/{id}(id = ${course.getId()})}" onclick="return confirm('Are you sure?')">
+                <a th:href="@{/cms/courses/delete/{id}(id = ${course.getId()})}"
+                   onclick="return confirm('This action will delete all semesters, subjects and batches related to the course.' +
+                    '\n Are you sure to continue?')">
                     <button class="btn btn-danger" th:text="Delete"></button>
                 </a>
             </td>

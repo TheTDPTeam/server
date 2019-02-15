@@ -2,12 +2,17 @@ package com.tdpteam.service.impl;
 
 import com.tdpteam.repo.dto.account.AccountCreationDTO;
 import com.tdpteam.repo.dto.account.AccountListItemDTO;
+import com.tdpteam.repo.entity.user.Student;
+import com.tdpteam.repo.entity.user.Teacher;
 import com.tdpteam.repo.entity.user.UserDetail;
 import com.tdpteam.repo.repository.RoleRepository;
+import com.tdpteam.repo.repository.StudentRepository;
+import com.tdpteam.repo.repository.TeacherRepository;
 import com.tdpteam.service.exception.user.UserNotFoundException;
 import com.tdpteam.service.helper.Constants;
 import com.tdpteam.repo.entity.user.Account;
 import com.tdpteam.repo.repository.AccountRepository;
+import com.tdpteam.service.helper.RoleType;
 import com.tdpteam.service.interf.AccountService;
 import com.tdpteam.service.interf.MailService;
 import com.tdpteam.service.interf.PasswordService;
@@ -26,6 +31,8 @@ import java.util.Optional;
 public class AccountServiceImpl implements AccountService {
     private AccountRepository accountRepository;
     private RoleRepository roleRepository;
+    private StudentRepository studentRepository;
+    private TeacherRepository teacherRepository;
     private PasswordService passwordService;
     private MailService mailService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -35,12 +42,18 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     public AccountServiceImpl(AccountRepository accountRepository,
-                              RoleRepository roleRepository, PasswordService passwordService,
+                              RoleRepository roleRepository,
+                              StudentRepository studentRepository,
+                              TeacherRepository teacherRepository,
+                              PasswordService passwordService,
                               MailService mailService,
                               BCryptPasswordEncoder bCryptPasswordEncoder,
-                              ModelMapper modelMapper, String emailTemplate) {
+                              ModelMapper modelMapper,
+                              String emailTemplate) {
         this.accountRepository = accountRepository;
         this.roleRepository = roleRepository;
+        this.studentRepository = studentRepository;
+        this.teacherRepository = teacherRepository;
         this.passwordService = passwordService;
         this.mailService = mailService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -112,7 +125,17 @@ public class AccountServiceImpl implements AccountService {
     public void createAccount(AccountCreationDTO accountCreationDTO) {
         Account userAccount = modelMapper.map(accountCreationDTO, Account.class);
         userAccount = updateUserDetail(accountCreationDTO, userAccount);
-        userAccount.setRole(roleRepository.findByRole(String.valueOf(accountCreationDTO.getRole())));
-        saveAccount(userAccount);
+        String roleName = accountCreationDTO.getRole();
+        userAccount.setRole(roleRepository.findByRole(roleName));
+        Account savedAccount = saveAccount(userAccount);
+        if(savedAccount == null) return;
+        switch (RoleType.valueOf(roleName)){
+            case STUDENT:
+                studentRepository.save(new Student(savedAccount));
+                break;
+            case TEACHER:
+                teacherRepository.save(new Teacher(savedAccount));
+                break;
+        }
     }
 }

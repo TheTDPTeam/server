@@ -42,9 +42,10 @@ public class StudentServiceImpl implements StudentService {
                 StudentListItemDTO.builder()
                 .id(student.getId())
                 .fullName(student.getAccount().getUserDetail().getFullName())
-                .batchName(student.getBatch().getName())
+                .batchName(student.getBatch() == null ? "No batch" : student.getBatch().getName())
                 .email(student.getAccount().getEmail())
                 .numberOfClasses(student.getBClasses().size())
+                .isActivated(student.getAccount().isActivated())
                 .build()
         ));
         return studentListItemDTOList;

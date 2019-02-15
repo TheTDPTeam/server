@@ -21,9 +21,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/cms")
-public class CourseController {
-    private static final Logger logger =
-            LoggerFactory.getLogger(CourseController.class);
+public class CourseController extends ExceptionController {
     private CourseService courseService;
     private ModelMapper modelMapper;
 
@@ -107,15 +105,5 @@ public class CourseController {
     public String deleteCourse(@PathVariable(name = "id") Long id){
         courseService.deleteCourse(id);
         return "redirect:/cms/courses";
-    }
-
-    @ExceptionHandler
-    public ModelAndView handleCourseNotFoundException(HttpServletRequest request, Exception ex){
-        logger.error(ExceptionLogGenerator.getRequestedUrlMessage(request.getRequestURL().toString()));
-        logger.error(ExceptionLogGenerator.getExceptionName(ex));
-
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("resourceNotFound");
-        return modelAndView;
     }
 }

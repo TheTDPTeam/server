@@ -21,7 +21,7 @@
                 <option th:selected="${courseId == null}">Select...</option>
                 <option th:each="course : ${courses}"
                         th:value="${course.getId()}"
-                        th:text="${course.getCode()}"
+                        th:text="${course.getDisplayName()}"
                         th:selected="${courseId != null && courseId.equals(course.getId())}"></option>
             </select>
             <br/>

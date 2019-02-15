@@ -34,7 +34,7 @@
         <tbody>
 
         <tr th:each="semester: ${semesters}" th:onclick="'navigateToSemesterDetail(\''+ ${semester.getId()} + '\');'">
-            <th scope="row" th:text="${semester.getId()}"></th>
+            <th scope="row" th:text="${semesters.indexOf(semester) + 1}"></th>
             <td th:text="${semester.getName()}"></td>
             <td th:text="${semester.getCourseCode()}"></td>
             <td th:text="${semester.getNumberOfSubjects()}"></td>

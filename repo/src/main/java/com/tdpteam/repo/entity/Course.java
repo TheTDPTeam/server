@@ -26,9 +26,9 @@ public class Course extends BaseEntityAudit {
     @Column
     private String code;
 
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course", orphanRemoval = true)
     private Set<Semester> semesters = new HashSet<>();
 
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course", orphanRemoval = true)
     private Set<Batch> batches = new HashSet<>();
 }

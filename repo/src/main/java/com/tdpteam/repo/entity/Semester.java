@@ -25,7 +25,7 @@ public class Semester extends BaseEntityAudit {
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
-    @OneToMany(mappedBy = "semester")
+    @OneToMany(mappedBy = "semester", orphanRemoval = true)
     private Set<Subject> subjects = new HashSet<>();
 
     @Column
