@@ -28,6 +28,9 @@ public class BaseEntityAudit extends BaseEntity {
     @Column(name = "updated_by", length = 20)
     private String updatedBy;
 
+    @Column(name = "is_activated", nullable = false)
+    private boolean isActivated = true;
+
     /**
      * Sets createdAt before insert
      */

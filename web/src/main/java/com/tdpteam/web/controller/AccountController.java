@@ -22,14 +22,10 @@ import javax.validation.Valid;
 @Controller
 public class AccountController {
     private final AccountService accountService;
-    private final ModelMapper modelMapper;
-    private final RoleRepository roleRepository;
 
     @Autowired
-    public AccountController(AccountService accountService, ModelMapper modelMapper, RoleRepository roleRepository) {
+    public AccountController(AccountService accountService) {
         this.accountService = accountService;
-        this.modelMapper = modelMapper;
-        this.roleRepository = roleRepository;
     }
 
     @GetMapping(value={"/", "/login"})
@@ -51,9 +47,8 @@ public class AccountController {
     @GetMapping("/accounts/add")
     public ModelAndView getAddAccountView(){
         ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("account", new AccountCreationDTO());
         modelAndView.setViewName("account/addAccount");
-        AccountCreationDTO account = new AccountCreationDTO();
-        modelAndView.addObject("account", account);
         return modelAndView;
     }
 
@@ -63,10 +58,7 @@ public class AccountController {
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName("account/addAccount");
         } else {
-            Account userAccount = modelMapper.map(accountCreationDTO, Account.class);
-            userAccount = accountService.updateUserDetail(accountCreationDTO, userAccount);
-            userAccount.setRole(roleRepository.findByRole(String.valueOf(accountCreationDTO.getRole())));
-            accountService.saveAccount(userAccount);
+            accountService.createAccount(accountCreationDTO);
             modelAndView.setViewName("redirect:/accounts");
         }
         return modelAndView;
@@ -80,7 +72,7 @@ public class AccountController {
 
     @GetMapping("/accounts/changeActivation/{id}")
     public String changeActivation(@PathVariable(name = "id") Long id){
-        accountService.changeAccountActivation(id);
+        accountService.changeActivation(id);
         return "redirect:/accounts";
     }
 }

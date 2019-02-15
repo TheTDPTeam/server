@@ -3,13 +3,16 @@ package com.tdpteam.repo.entity;
 import com.tdpteam.repo.entity.base.BaseEntityAudit;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
+@ToString(exclude = "bClasses")
+@EqualsAndHashCode(callSuper = false, exclude = "bClasses")
 @Table(name = "subject")
 public class Subject extends BaseEntityAudit {
     @Column
@@ -19,10 +22,10 @@ public class Subject extends BaseEntityAudit {
     private String description;
 
     @Column
-    private int order;
+    private int subjectOrder;
 
     @Column
-    private int numberOfSection;
+    private int numberOfLessons;
 
     @Column
     private boolean hasTheoryExamination = true;
@@ -35,5 +38,5 @@ public class Subject extends BaseEntityAudit {
     private Semester semester;
 
     @OneToMany(mappedBy = "subject")
-    private Set<BClass> bClasses;
+    private Set<BClass> bClasses = new HashSet<>();
 }

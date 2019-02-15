@@ -9,7 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Table(name = "score")
 public class Score extends BaseEntityAudit {
 

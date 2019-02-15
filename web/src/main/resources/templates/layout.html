@@ -42,14 +42,38 @@
                     </ul>
                 </li>
                 <li sec:authorize="hasAuthority('STAFF')">
-                    <a href="#teacherSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Teacher
+                    <a href="#courseSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Course
                         Management</a>
-                    <ul class="collapse list-unstyled" id="teacherSubmenu">
+                    <ul class="collapse list-unstyled" id="courseSubmenu">
                         <li>
-                            <a href="#">Teacher list</a>
+                            <a th:href="@{/cms/courses}">Course list</a>
                         </li>
                         <li>
-                            <a href="#">Add teacher</a>
+                            <a th:href="@{/cms/semesters}">Semester list</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/cms/subjects}">Subject list</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/cms/batches}">Batch list</a>
+                        </li>
+                    </ul>
+                </li>
+                <li sec:authorize="hasAuthority('STAFF')">
+                    <a href="#classSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Class
+                        Management</a>
+                    <ul class="collapse list-unstyled" id="classSubmenu">
+                        <li>
+                            <a th:href="@{/cms/teachers}">Teacher list</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/cms/students}">Student list</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/cms/classes}">Class list</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/cms/attendances}">Attendance management</a>
                         </li>
                     </ul>
                 </li>

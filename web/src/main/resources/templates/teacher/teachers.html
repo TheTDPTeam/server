@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Teacher list</title>
+    <script>
+        function navigateToTeacherDetail(id) {
+            window.location.href = "/cms/teachers/" + id;
+        }
+    </script>
+</head>
+<body>
+<div layout:fragment="content">
+    <table class="table table-striped table-responsive-md">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Full Name</th>
+            <th scope="col">Number of classes</th>
+            <th scope="col">Is activated</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each="teacher: ${teachers}" th:onclick="'navigateToTeacherDetail(\''+ ${teacher.getId()} + '\');'">
+            <th scope="row" th:text="${teachers.indexOf(teacher) + 1}"></th>
+            <td th:text="${teacher.getFullName()}"></td>
+            <td th:text="${teacher.getNumberOfClasses()}"></td>
+            <td th:text="${teacher.isActivated()?'Activated':'Deactivated'}" th:style="'color:' + ${teacher.isActivated() ? '#28a745':'#ffc107'}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

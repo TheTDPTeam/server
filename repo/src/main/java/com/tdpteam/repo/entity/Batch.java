@@ -7,12 +7,13 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "batch")
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 public class Batch extends BaseEntityAudit {
     @Column
     private String name;
@@ -24,7 +25,7 @@ public class Batch extends BaseEntityAudit {
     private Date endDate;
 
     @OneToMany(mappedBy = "batch")
-    private Set<Student> students;
+    private Set<Student> students = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)

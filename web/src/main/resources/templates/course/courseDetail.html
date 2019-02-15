@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Course detail</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <a href="#semesterList" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Semesters</a>
+    <ul class="collapse list-unstyled" id="semesterList">
+        <li th:each="semester : ${course.getSemesterSet()}">
+            <a href="#subjectList" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Subjects</a>
+            <ul class="collapse list-unstyled" id="#subjectList">
+                <li th:each="subject : ${semester.getSubjects()}">
+                    <a href="#" th:text="${subject.getName()}"></a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <!--TODO: Finish course detail after working with semester management-->
+</div>
+</body>
+</html>

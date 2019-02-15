@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Student list</title>
+    <script>
+        function navigateToStudentDetail(id) {
+            window.location.href = "/cms/students/" + id;
+        }
+    </script>
+</head>
+<body>
+<div layout:fragment="content">
+    <table class="table table-striped table-responsive-md">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Full name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Batch</th>
+            <th scope="col">Number of classes</th>
+            <th scope="col">Is activated</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each="student: ${students}" th:onclick="'navigateToStudentDetail(\''+ ${student.getId()} + '\');'">
+            <th scope="row" th:text="${students.indexOf(student) + 1}"></th>
+            <td th:text="${student.getFullName()}"></td>
+            <td th:text="${student.getEmail()}"></td>
+            <td th:text="${student.getBatchName()}"></td>
+            <td th:text="${student.getNumberOfClasses()}"></td>
+            <td th:text="${student.isActivated()?'Activated':'Deactivated'}" th:style="'color:' + ${student.isActivated() ? '#28a745':'#ffc107'}"></td>
+            <td>
+                <a th:href="@{/cms/subjects/edit/{id}(id = ${student.getId()})}">
+                    <button class="btn btn-secondary" th:text="Edit"></button>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
