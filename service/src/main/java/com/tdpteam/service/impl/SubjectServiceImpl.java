@@ -71,9 +71,20 @@ public class SubjectServiceImpl implements SubjectService {
         List<Subject> subjects = subjectRepository.findAllByOrderBySemesterDesc();
         List<SelectionItem> courseListItemDTOS = new ArrayList<>();
         subjects.forEach(subject -> courseListItemDTOS.add(
-                new SelectionItem(subject.getId(), subject.getName())
+                new SelectionItem(subject.getId(), subject.getName() + "|"
+                        + subject.getSemester().getName() + "|"
+                        + subject.getSemester().getCourse().getName())
         ));
         return courseListItemDTOS;
+    }
+
+    @Override
+    public Subject getSubjectById(Long id) {
+        Optional<Subject> optionalSubject = subjectRepository.findById(id);
+        if(!optionalSubject.isPresent()){
+            throw new SubjectNotFoundException(id);
+        }
+        return optionalSubject.get();
     }
 
     @Override

@@ -1,9 +1,7 @@
 package com.tdpteam.web.controller;
 
 import com.tdpteam.repo.dto.bClass.BClassDTO;
-import com.tdpteam.service.interf.BClassService;
-import com.tdpteam.service.interf.SubjectService;
-import com.tdpteam.service.interf.TeacherService;
+import com.tdpteam.service.interf.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -18,12 +16,18 @@ public class BClassController {
     private BClassService bClassService;
     private SubjectService subjectService;
     private TeacherService teacherService;
+    private StudentService studentService;
+    private AttendanceService attendanceService;
+    private ScoreService scoreService;
 
     @Autowired
-    public BClassController(BClassService bClassService, SubjectService subjectService, TeacherService teacherService) {
+    public BClassController(BClassService bClassService, SubjectService subjectService, TeacherService teacherService, StudentService studentService, AttendanceService attendanceService, ScoreService scoreService) {
         this.bClassService = bClassService;
         this.subjectService = subjectService;
         this.teacherService = teacherService;
+        this.studentService = studentService;
+        this.attendanceService = attendanceService;
+        this.scoreService = scoreService;
     }
 
     @GetMapping
@@ -37,8 +41,8 @@ public class BClassController {
     @GetMapping(value = "/{id}")
     public ModelAndView getClassById(@PathVariable(name = "id") Long id){
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("bClass", bClassService.getBClassById(id));
-        modelAndView.setViewName("bClass/bClassDetails");
+        modelAndView.addObject("bClass", bClassService.getBClassDetail(id));
+        modelAndView.setViewName("bClass/bClassDetail");
         return modelAndView;
     }
 
@@ -46,23 +50,62 @@ public class BClassController {
     public ModelAndView getAddBatchView(){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("bClass", new BClassDTO());
-        modelAndView.addObject("subjects", subjectService.getAllSubjectsForSelection());
-        modelAndView.addObject("students", teacherService.getAllTeachersForSelection());
-        modelAndView.setViewName("bClass/addBClass");
+        getObjectsForAddingBClasses(modelAndView);
         return modelAndView;
     }
 
+    private void getObjectsForAddingBClasses(ModelAndView modelAndView) {
+        modelAndView.addObject("subjects", subjectService.getAllSubjectsForSelection());
+        modelAndView.addObject("students", studentService.getAvailableStudentsForJoiningClass());
+        modelAndView.addObject("teachers", teacherService.getAllTeachersForSelection());
+        modelAndView.setViewName("bClass/addBClass");
+    }
+
     @PostMapping(value = "/add")
-    public ModelAndView addBClass(@Valid @ModelAttribute("bClassDTO") BClassDTO bClassDTO, BindingResult bindingResult){
+    public ModelAndView addBClass(@Valid @ModelAttribute("bClass") BClassDTO bClassDTO, BindingResult bindingResult){
         ModelAndView modelAndView = new ModelAndView();
         if(bindingResult.hasErrors()){
-            modelAndView.addObject("subjects", subjectService.getAllSubjectsForSelection());
-            modelAndView.addObject("students", teacherService.getAllTeachersForSelection());
-            modelAndView.setViewName("bClass/addBClass");
+            getObjectsForAddingBClasses(modelAndView);
         }else{
             bClassService.createBClass(bClassDTO);
             modelAndView.setViewName("redirect:/cms/classes");
         }
         return modelAndView;
+    }
+
+    @GetMapping("/checkAttendance/{id}")
+    public ModelAndView getAttendanceView(@PathVariable("id") Long id){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("attendances", attendanceService.getAttendancesByClassId(id));
+        modelAndView.setViewName("bClass/attendances");
+        return modelAndView;
+    }
+
+    @GetMapping("/checkScore/{id}")
+    public ModelAndView getScoreView(@PathVariable("id") Long id){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("scores", scoreService.getScoreListOfBClass(id));
+        modelAndView.setViewName("bClass/scores");
+        return modelAndView;
+    }
+
+    @GetMapping("/changeActivation/{id}")
+    public String changeActivation(@PathVariable(name = "id") Long id){
+        bClassService.changeActivation(id);
+        return "redirect:/cms/classes";
+    }
+
+    @GetMapping(value = "/delete/{id}")
+    public String deleteCourse(@PathVariable(name = "id") Long id){
+        bClassService.deleteCourse(id);
+        return "redirect:/cms/classes";
+    }
+
+    @ModelAttribute("multiCheckboxAllValues")
+    public String[] getMultiCheckboxAllValues() {
+        return new String[] {
+                "Monday", "Tuesday", "Wednesday", "Thursday",
+                "Friday", "Saturday", "Sunday"
+        };
     }
 }

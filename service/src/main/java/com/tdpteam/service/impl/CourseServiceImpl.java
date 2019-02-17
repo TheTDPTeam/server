@@ -4,7 +4,9 @@ import com.tdpteam.repo.dto.SelectionItem;
 import com.tdpteam.repo.dto.course.CourseDTO;
 import com.tdpteam.repo.dto.course.CourseDetailDTO;
 import com.tdpteam.repo.dto.course.CourseListItemDTO;
+import com.tdpteam.repo.entity.Batch;
 import com.tdpteam.repo.entity.Course;
+import com.tdpteam.repo.entity.Semester;
 import com.tdpteam.repo.repository.CourseRepository;
 import com.tdpteam.repo.repository.SemesterRepository;
 import com.tdpteam.service.exception.course.CourseNotFoundException;
@@ -13,9 +15,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -89,12 +90,16 @@ public class CourseServiceImpl implements CourseService {
             throw new CourseNotFoundException(id);
         }
         Course course = optionalCourse.get();
+        List<Semester> semesters = new ArrayList<>(course.getSemesters());
+        List<Batch> batches = new ArrayList<>(course.getBatches());
+        semesters.sort(Comparator.comparing(Semester::getName));
+        batches.sort(Comparator.comparing(Batch::getCode));
         return CourseDetailDTO.builder()
                 .name(course.getName())
                 .code(course.getCode())
                 .isActivated(course.isActivated())
-                .batchSet(course.getBatches())
-                .semesterSet(course.getSemesters())
+                .batches(batches)
+                .semesters(semesters)
                 .build();
     }
 
@@ -110,9 +115,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void changeActivation(Long id) {
-        Optional<Course> optionalAccount = courseRepository.findById(id);
-        if (optionalAccount.isPresent()) {
-            Course course = optionalAccount.get();
+        Optional<Course> optionalCourse = courseRepository.findById(id);
+        if (optionalCourse.isPresent()) {
+            Course course = optionalCourse.get();
             course.setActivated(!course.isActivated());
             courseRepository.save(course);
         }

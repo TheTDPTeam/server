@@ -1,7 +1,5 @@
 package com.tdpteam.repo.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tdpteam.repo.entity.base.BaseEntityAudit;
 import com.tdpteam.repo.entity.user.Student;
 import com.tdpteam.repo.entity.user.Teacher;
@@ -16,8 +14,8 @@ import java.util.Set;
 
 @Entity
 @Data
-@ToString(exclude = {"attendances", "students"})
-@EqualsAndHashCode(callSuper = false, exclude = {"attendances","students"})
+@ToString(exclude = {"attendances", "students", "teacher", "subject", "scores"})
+@EqualsAndHashCode(callSuper = false, exclude = {"attendances","students", "teacher", "subject", "scores"})
 @Table(name = "bClass")
 public class BClass extends BaseEntityAudit {
     @Column
@@ -25,7 +23,6 @@ public class BClass extends BaseEntityAudit {
 
     @ManyToOne
     @JoinColumn(name = "teacher_id", nullable = false)
-    @JsonBackReference
     private Teacher teacher;
 
     @ManyToMany(cascade = {
@@ -39,7 +36,6 @@ public class BClass extends BaseEntityAudit {
 
     @ManyToOne
     @JoinColumn(name = "subject_id", nullable = false)
-    @JsonBackReference
     private Subject subject;
 
     @Column
@@ -47,6 +43,12 @@ public class BClass extends BaseEntityAudit {
     @Column
     private Date estimatedEndDate;
 
-    @OneToMany(mappedBy = "bClass")
+    @OneToMany(mappedBy = "bClass", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Attendance> attendances = new HashSet<>();
+
+    @OneToMany(mappedBy = "bClass", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Score> scores = new HashSet<>();
+
+    @Column
+    private String calendar;
 }

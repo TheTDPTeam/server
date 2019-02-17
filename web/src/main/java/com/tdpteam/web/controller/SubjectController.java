@@ -12,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("/cms")
+@RequestMapping("/cms/subjects")
 public class SubjectController {
     private SubjectService subjectService;
     private SemesterService semesterService;
@@ -23,15 +23,23 @@ public class SubjectController {
         this.semesterService = semesterService;
     }
 
-    @GetMapping(value = "/subjects")
-    public ModelAndView getAllCourses() {
+    @GetMapping
+    public ModelAndView getAllSubjects() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("subjects", subjectService.getAllSubjects());
         modelAndView.setViewName("subject/subjects");
         return modelAndView;
     }
 
-    @GetMapping(value = "/subjects/add")
+    @GetMapping("/{id}")
+    public ModelAndView getSubjectById(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("subject", subjectService.getSubjectById(id));
+        modelAndView.setViewName("subject/subjectDetail");
+        return modelAndView;
+    }
+
+    @GetMapping(value = "/add")
     public ModelAndView showAddSubjectView() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("subject", new SubjectDTO());
@@ -40,7 +48,7 @@ public class SubjectController {
         return modelAndView;
     }
 
-    @PostMapping(value = "/subjects/add")
+    @PostMapping(value = "/add")
     public ModelAndView addSubject(@Valid @ModelAttribute("subject") SubjectDTO subjectDTO, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
         if (bindingResult.hasErrors()) {
@@ -54,13 +62,13 @@ public class SubjectController {
         return modelAndView;
     }
 
-    @GetMapping("/subjects/changeActivation/{id}")
+    @GetMapping("/changeActivation/{id}")
     public String changeActivation(@PathVariable(name = "id") Long id){
         subjectService.changeActivation(id);
         return "redirect:/cms/subjects";
     }
 
-    @GetMapping(value = "/subjects/delete/{id}")
+    @GetMapping(value = "/delete/{id}")
     public String deleteCourse(@PathVariable(name = "id") Long id){
         subjectService.deleteSubject(id);
         return "redirect:/cms/subjects";

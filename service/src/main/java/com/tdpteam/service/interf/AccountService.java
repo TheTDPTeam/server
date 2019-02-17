@@ -5,7 +5,6 @@ import com.tdpteam.repo.dto.account.AccountListItemDTO;
 import com.tdpteam.repo.entity.user.Account;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Async;
 
 public interface AccountService extends ActivationService{
     Account findAccountByEmail(String email);
@@ -16,4 +15,6 @@ public interface AccountService extends ActivationService{
     Page<AccountListItemDTO> getPaginatedAccountList(Pageable pageable);
     void deleteAccount(Long id);
     void createAccount(AccountCreationDTO accountCreationDTO);
+
+    Long getCurrentUserId();
 }

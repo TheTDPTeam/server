@@ -1,5 +1,6 @@
 package com.tdpteam.service.impl;
 
+import com.tdpteam.repo.dto.SelectionItem;
 import com.tdpteam.repo.dto.batch.BatchDTO;
 import com.tdpteam.repo.dto.batch.BatchListItemDTO;
 import com.tdpteam.repo.entity.Batch;
@@ -42,7 +43,6 @@ public class BatchServiceImpl implements BatchService {
                         .courseCode(batch.getCourse().getCode())
                         .numberOfStudents(batch.getStudents().size())
                         .startDate(batch.getStartDate())
-                        .endDate(batch.getEndDate())
                         .isActivated(batch.isActivated())
                         .build()
         ));
@@ -67,5 +67,32 @@ public class BatchServiceImpl implements BatchService {
         Batch newBatch = modelMapper.map(batchDTO, Batch.class);
         newBatch.setCourse(optionalCourse.get());
         batchRepository.save(newBatch);
+    }
+
+    @Override
+    public void deleteSubject(Long id) {
+        try{
+            batchRepository.deleteById(id);
+        }catch (Exception ignored){}
+    }
+
+    @Override
+    public List<SelectionItem> getAllBatchesForSelection() {
+        List<Batch> batches = batchRepository.findAllByOrderByCreatedAtDesc();
+        List<SelectionItem> selectionItems = new ArrayList<>();
+        batches.forEach(batch -> selectionItems.add(
+                new SelectionItem(batch.getId(), batch.getName())
+        ));
+        return selectionItems;
+    }
+
+    @Override
+    public void changeActivation(Long id) {
+        Optional<Batch> optionalBatch = batchRepository.findById(id);
+        if (optionalBatch.isPresent()) {
+            Batch batch = optionalBatch.get();
+            batch.setActivated(!batch.isActivated());
+            batchRepository.save(batch);
+        }
     }
 }

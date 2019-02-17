@@ -4,6 +4,7 @@ import com.tdpteam.repo.entity.Batch;
 import com.tdpteam.repo.entity.Semester;
 import lombok.*;
 
+import java.util.List;
 import java.util.Set;
 
 @Builder
@@ -19,10 +20,10 @@ public class CourseDetailDTO {
     private String code;
     @Getter
     @Setter
-    private Set<Semester> semesterSet;
+    private List<Semester> semesters;
     @Getter
     @Setter
-    private Set<Batch> batchSet;
+    private List<Batch> batches;
 
     private boolean isActivated;
 

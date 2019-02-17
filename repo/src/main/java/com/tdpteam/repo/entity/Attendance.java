@@ -1,12 +1,12 @@
 package com.tdpteam.repo.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.tdpteam.repo.entity.base.BaseEntity;
 import com.tdpteam.repo.entity.user.Student;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Data
@@ -14,16 +14,17 @@ import javax.persistence.*;
 @Table(name = "attendance")
 public class Attendance extends BaseEntity {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bClass_id", nullable = false)
-    @JsonBackReference
     private BClass bClass;
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
-    @JsonBackReference
     private Student student;
 
     @Enumerated(EnumType.STRING)
-    private AttendanceStatus status;
+    private AttendanceStatus status = AttendanceStatus.NotYet;
+
+    @Column(name = "checking_date", nullable = false)
+    private Date checkingDate;
 }

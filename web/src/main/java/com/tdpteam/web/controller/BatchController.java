@@ -49,10 +49,10 @@ public class BatchController {
     }
 
     @PostMapping(value = "/add")
-    public ModelAndView addBatch(@Valid @ModelAttribute("batchDTO") BatchDTO batchDTO, BindingResult bindingResult){
+    public ModelAndView addBatch(@Valid @ModelAttribute("batch") BatchDTO batchDTO, BindingResult bindingResult){
         ModelAndView modelAndView = new ModelAndView();
         if(bindingResult.hasErrors()){
-            modelAndView.addObject("batch", batchDTO);
+            modelAndView.addObject("selectedCourseId", batchDTO.getCourseId());
             modelAndView.addObject("courses", courseService.getAllCoursesForSelection());
             modelAndView.setViewName("batch/addBatch");
         }else{
@@ -60,5 +60,17 @@ public class BatchController {
             modelAndView.setViewName("redirect:/cms/batches");
         }
         return modelAndView;
+    }
+
+    @GetMapping("/changeActivation/{id}")
+    public String changeActivation(@PathVariable(name = "id") Long id){
+        batchService.changeActivation(id);
+        return "redirect:/cms/batches";
+    }
+
+    @GetMapping(value = "/delete/{id}")
+    public String deleteCourse(@PathVariable(name = "id") Long id){
+        batchService.deleteSubject(id);
+        return "redirect:/cms/batches";
     }
 }

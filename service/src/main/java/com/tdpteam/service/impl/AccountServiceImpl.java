@@ -21,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -137,5 +139,16 @@ public class AccountServiceImpl implements AccountService {
                 teacherRepository.save(new Teacher(savedAccount));
                 break;
         }
+    }
+
+    @Override
+    public Long getCurrentUserId() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(principal instanceof UserDetails){
+            String email = ((UserDetails) principal).getUsername();
+            Account account = accountRepository.findByEmail(email);
+            return account.getId();
+        }
+        return null;
     }
 }

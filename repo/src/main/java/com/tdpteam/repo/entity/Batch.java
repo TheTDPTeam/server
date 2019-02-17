@@ -4,6 +4,7 @@ import com.tdpteam.repo.entity.base.BaseEntityAudit;
 import com.tdpteam.repo.entity.user.Student;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -13,7 +14,8 @@ import java.util.Set;
 @Entity
 @Table(name = "batch")
 @Data
-@EqualsAndHashCode(callSuper = false)
+@ToString(exclude = "students")
+@EqualsAndHashCode(callSuper = false, exclude = "students")
 public class Batch extends BaseEntityAudit {
     @Column
     private String name;
@@ -21,8 +23,6 @@ public class Batch extends BaseEntityAudit {
     private String code;
     @Column
     private Date startDate;
-    @Column
-    private Date endDate;
 
     @OneToMany(mappedBy = "batch")
     private Set<Student> students = new HashSet<>();

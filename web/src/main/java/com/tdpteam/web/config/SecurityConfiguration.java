@@ -47,10 +47,25 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/login", "/setup", "/actuator", "/webjars/**").permitAll()
-                .antMatchers( "/home").hasAnyAuthority(String.valueOf(ADMIN), String.valueOf(STAFF))
+                .antMatchers("/", "/login", "/setup", "/actuator", "/webjars/**", "/notfound").permitAll()
+                .antMatchers( "/home").hasAnyAuthority(String.valueOf(ADMIN), String.valueOf(STAFF), String.valueOf(TEACHER))
                 .antMatchers("/accounts/**").hasAuthority(String.valueOf(ADMIN))
-                .antMatchers("/cms/**").hasAuthority(String.valueOf(STAFF))
+                .antMatchers(
+                        "/cms/courses/**",
+                        "/cms/batches/**",
+                        "/cms/semesters/**",
+                        "/cms/subjects/**",
+                        "/cms/teachers/**",
+                        "/cms/students/**").hasAuthority(String.valueOf(STAFF))
+                .antMatchers("/cms/attendances/**","/cms/scores/**").hasAnyAuthority(String.valueOf(STAFF), String.valueOf(TEACHER))
+                .antMatchers(
+                        "/cms/classes",
+                        "/cms/classes/checkAttendance/**",
+                        "/cms/classes/checkScore/**").hasAnyAuthority(String.valueOf(STAFF), String.valueOf(TEACHER))
+                .antMatchers(
+                        "/cms/classes/add",
+                        "/cms/classes/changeActivation/**",
+                        "/cms/classes/delete/**").hasAuthority(String.valueOf(STAFF))
                 .anyRequest()
                 .authenticated()
                 .and()
