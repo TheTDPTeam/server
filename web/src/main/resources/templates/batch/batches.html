@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Batch list</title>
+    <script>
+        function navigateToBatchDetail(id) {
+            window.location.href = "/cms/batches/" + id;
+        }
+    </script>
+</head>
+<body>
+<div layout:fragment="content">
+    <a th:href="@{/cms/batches/add}">
+        <button class="btn btn-primary">
+            Add a new batch
+        </button>
+    </a>
+    <br/>
+    <table class="table table-striped table-responsive-md">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Code</th>
+            <th scope="col">Course</th>
+            <th scope="col">Start date</th>
+            <th scope="col">Number of students</th>
+            <th scope="col">Activation</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each="batch: ${batches}" th:onclick="'navigateToBatchDetail(\''+ ${batch.getId()} + '\');'">
+            <th scope="row" th:text="${batches.indexOf(batch) + 1}"></th>
+            <td th:text="${batch.getName()}"></td>
+            <td th:text="${batch.getCode()}"></td>
+            <td th:text="${batch.getCourseCode()}"></td>
+            <td th:text="${#dates.format(batch.getStartDate(),'MMM dd, yyyy')}"></td>
+            <td th:text="${batch.getNumberOfStudents()}"></td>
+            <td th:text="${batch.isActivated()?'Activated':'Deactivated'}" th:style="'color:' + ${batch.isActivated() ? '#28a745':'#ffc107'}"></td>
+            <td>
+                <a th:href="@{/cms/batches/changeActivation/{id}(id = ${batch.getId()})}">
+                    <button class="btn" th:classappend="${batch.isActivated()} ? 'btn-warning' : 'btn-success'"
+                            th:text="${batch.isActivated()?'Deactivate':'Activate'}"></button>
+                </a>
+                <a th:href="@{/cms/batches/edit/{id}(id = ${batch.getId()})}">
+                    <button class="btn btn-secondary" th:text="Edit"></button>
+                </a>
+                <a th:href="@{/cms/batches/delete/{id}(id = ${batch.getId()})}" onclick="return confirm('Are you sure?')">
+                    <button class="btn btn-danger" th:text="Delete"></button>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

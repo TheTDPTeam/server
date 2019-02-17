@@ -9,4 +9,5 @@ public class Constants {
     public static final int DEFAULT_PASSWORD_LENGTH = 8;
     public static final boolean USE_LETTERS_FOR_DEFAULT_PASSWORD = true;
     public static final boolean USE_NUMBERS_FOR_DEFAULT_PASSWORD = true;
+    public static final String SEMESTER_PREFIX = "Semester";
 }

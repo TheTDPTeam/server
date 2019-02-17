@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Course list</title>
+    <script>
+        function navigateToCourseDetail(id) {
+            window.location.href = "/cms/courses/" + id;
+        }
+    </script>
+</head>
+<body>
+<div layout:fragment="content">
+    <a th:href="@{/cms/courses/add}">
+        <button class="btn btn-primary">
+            Add a new course
+        </button>
+    </a>
+    <br/>
+    <table class="table table-striped table-responsive-md">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Code</th>
+            <th scope="col">Number of Semesters</th>
+            <th scope="col">Number of Subjects</th>
+            <th scope="col">Number of Batches</th>
+            <th scope="col">Is activated</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each="course: ${courses}" th:onclick="'navigateToCourseDetail(\''+ ${course.getId()} + '\');'">
+            <th scope="row" th:text="${courses.indexOf(course) + 1}"></th>
+            <td th:text="${course.getName()}"></td>
+            <td th:text="${course.getCode()}"></td>
+            <td th:text="${course.getNumberOfSemesters()}"></td>
+            <td th:text="${course.getNumberOfSubjects()}"></td>
+            <td th:text="${course.getNumberOfBatches()}"></td>
+            <td th:text="${course.isActivated()?'Activated':'Deactivated'}" th:style="'color:' + ${course.isActivated() ? '#28a745':'#ffc107'}"></td>
+            <td>
+                <a th:href="@{/cms/courses/changeActivation/{id}(id = ${course.getId()})}">
+                    <button class="btn" th:classappend="${course.isActivated()} ? 'btn-warning' : 'btn-success'"
+                            th:text="${course.isActivated()?'Deactivate':'Activate'}"></button>
+                </a>
+                <a th:href="@{/cms/courses/edit/{id}(id = ${course.getId()})}">
+                    <button class="btn btn-secondary" th:text="Edit"></button>
+                </a>
+                <a th:href="@{/cms/courses/delete/{id}(id = ${course.getId()})}"
+                   onclick="return confirm('This action will delete all semesters, subjects and batches related to the course.' +
+                    '\n Are you sure to continue?')">
+                    <button class="btn btn-danger" th:text="Delete"></button>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

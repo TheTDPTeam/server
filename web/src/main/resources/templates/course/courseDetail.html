@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Course detail</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="row">
+        <div class="col-6">
+            <h4>Semesters:</h4>
+            <ul class="list-unstyled" style="margin-left: 20px">
+                <li th:each="semester : ${course.getSemesters()}">
+                    <h5 th:text="'Subjects of '+ ${semester.getName()}"></h5>
+                    <ul class="list-unstyled" style="margin-left: 20px">
+                        <li th:each="subject : ${semester.getSubjects()}">
+                            <h6 th:text="${subject.getName()}"></h6>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="col-6">
+            <h4>Batches:</h4>
+            <ul class="list-unstyled" style="margin-left: 20px">
+                <li th:each="batch : ${course.getBatches()}">
+                    <h6 th:text="${batch.getName()}"></h6>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

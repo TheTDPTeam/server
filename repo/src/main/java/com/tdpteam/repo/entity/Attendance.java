@@ -1,24 +1,30 @@
 package com.tdpteam.repo.entity;
 
 import com.tdpteam.repo.entity.base.BaseEntity;
+import com.tdpteam.repo.entity.user.Student;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NonNull;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Table(name = "attendance")
 public class Attendance extends BaseEntity {
-    @OneToOne
-    @JoinColumn(name = "bClass_id")
-    @MapsId
-    @NonNull
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bClass_id", nullable = false)
     private BClass bClass;
-    private Date startDate;
-    private Date endDate;
-    private String fileUrl;
+
+    @ManyToOne
+    @JoinColumn(name = "student_id", nullable = false)
+    private Student student;
+
+    @Enumerated(EnumType.STRING)
+    private AttendanceStatus status = AttendanceStatus.NotYet;
+
+    @Column(name = "checking_date", nullable = false)
+    private Date checkingDate;
 }

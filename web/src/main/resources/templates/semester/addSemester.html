@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Add a semester</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <script type="text/javascript">
+        function onCourseChangedEventHandler() {
+            window.location.href = '/cms/semesters/add?courseId=' + document.getElementById('courseId').value;
+        }
+    </script>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3" style="margin: 0 auto">
+            <label for="courseId">Course:</label>
+            <select id="courseId" class="form-control" name="courseId" onchange="onCourseChangedEventHandler()">
+                <option th:selected="${courseId == null}">Select...</option>
+                <option th:each="course : ${courses}"
+                        th:value="${course.getId()}"
+                        th:text="${course.getDisplayName()}"
+                        th:selected="${courseId != null && courseId.equals(course.getId())}"></option>
+            </select>
+            <br/>
+            <form th:if="${courseId != null}" autocomplete="off" action="#" th:action="@{/cms/semesters/add(courseId=${courseId})}"
+                  th:object="${semester}" method="post" class="form-horizontal"
+                  role="form">
+                <div class="form-group">
+                    <div class="col-sm-9 form-item">
+                        <label for="name">New semester name:</label>
+                        <input id="name" type="text" disabled th:value="${newSemesterName}" class="form-control"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-9 form-item">
+                        <input type="text" th:field="*{description}"
+                               placeholder="Description" class="form-control"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-9 form-item">
+                        <button type="submit" class="btn btn-primary btn-block">Add a semester</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

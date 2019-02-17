@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tdpteam.repo.entity.base.BaseEntityAudit;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,7 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false, exclude = {"student", "teacher"})
+@ToString(exclude = {"student", "teacher"})
 @Data
 @Entity
 @Table(name = "account")
@@ -24,17 +26,14 @@ public class Account extends BaseEntityAudit implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "account", optional = false)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "account", optional = false, orphanRemoval = true)
     private UserDetail userDetail;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "account")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "account", orphanRemoval = true)
     private Student student;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "account")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "account", orphanRemoval = true)
     private Teacher teacher;
-
-    @Column
-    private boolean isActivated;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "role_id", nullable = false)

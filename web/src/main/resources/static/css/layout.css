@@ -12,6 +12,7 @@
 
 #contentContainer{
     padding: 0.5rem 1rem;
+    transition: all 0.3s;
 }
 
 .form-item{
@@ -95,10 +96,13 @@ a, a:hover, a:focus {
     font-size: 1.1em;
     display: block;
 }
+
+
 #sidebar ul li a:hover {
     color: #7386D5;
     background: #fff;
 }
+
 
 #sidebar ul li.active > a, a[aria-expanded="true"] {
     color: #fff;

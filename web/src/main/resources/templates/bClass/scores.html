@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Score list</title>
+    <script>
+        function updateScore(scoreId) {
+            var theoryScore = document.getElementById('theoryScore' + scoreId).value;
+            var practicalScore = document.getElementById('practicalScore' + scoreId).value;
+            window.location.href = "/cms/scores/" + scoreId + "/update?theory=" + theoryScore + "&practical=" + practicalScore;
+        }
+    </script>
+</head>
+<body>
+<div layout:fragment="content">
+    <table th:if="${scores != null && scores.size()>0}" class="table table-striped table-responsive-md">
+        <thead>
+        <tr>
+            <th scope="col">Student name</th>
+            <th scope="col">Theory score</th>
+            <th scope="col">Practical score</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each="score: ${scores}">
+            <th scope="row" th:text="${score.getStudentName()}"></th>
+            <td>
+                <input th:id="'theoryScore' + ${score.getId()}"
+                       class="form-control"
+                       type="number"
+                       th:style="'background:'+${score.isTheoryScorePassed()?'green':'red'}+ ';color:white;max-width:100px'"
+                       th:value="${score.getTheoryScore()}"/>
+            </td>
+            <td>
+                <input th:id="'practicalScore' + ${score.getId()}"
+                       class="form-control"
+                       type="number"
+                       th:style="'background:'+${score.isPracticalScorePassed()?'green':'red'} + ';color:white;max-width:100px'"
+                       th:value="${score.getPracticalScore()}"/>
+            </td>
+            <td>
+                <button
+                        class="btn btn-primary"
+                        th:onclick="'updateScore(\''+ ${score.getId()} + '\');'">
+                    Save
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
