@@ -91,49 +91,22 @@ a, a:hover, a:focus {
     padding: 10px;
 }
 
-#contentContainer ul p {
-    color: #fff;
-    padding: 10px;
-}
-
 #sidebar ul li a {
     padding: 10px;
     font-size: 1.1em;
     display: block;
 }
 
-#contentContainer ul li a {
-    padding: 10px;
-    font-size: 1.1em;
-    display: block;
-}
 
 #sidebar ul li a:hover {
     color: #7386D5;
     background: #fff;
 }
 
-#contentContainer a:hover {
-    color: orange;
-    background: #fff;
-}
 
 #sidebar ul li.active > a, a[aria-expanded="true"] {
     color: #fff;
     background: #6d7fcc;
-}
-
-#contentContainer ul li.active > a, a[aria-expanded="true"] {
-    color: #fff;
-    background: orange;
-}
-
-#contentContainer a{
-    min-width: 250px;
-}
-
-#contentContainer ul ul a {
-    background: orange !important;
 }
 
 ul ul a {

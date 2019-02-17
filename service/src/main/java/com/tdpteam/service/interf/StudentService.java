@@ -1,5 +1,6 @@
 package com.tdpteam.service.interf;
 
+import com.tdpteam.repo.dto.SelectionItem;
 import com.tdpteam.repo.dto.student.StudentListItemDTO;
 import com.tdpteam.repo.entity.user.Student;
 import org.springframework.scheduling.annotation.Async;
@@ -13,4 +14,6 @@ public interface StudentService {
 
     @Async
     void changeBatch(Long id, Long batchId);
+
+    List<SelectionItem> getAvailableStudentsForJoiningClass();
 }

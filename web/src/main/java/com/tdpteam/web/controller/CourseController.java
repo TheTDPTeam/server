@@ -20,7 +20,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@RequestMapping("/cms")
+@RequestMapping("/cms/courses")
 public class CourseController extends ExceptionController {
     private CourseService courseService;
     private ModelMapper modelMapper;
@@ -32,7 +32,7 @@ public class CourseController extends ExceptionController {
     }
 
 
-    @GetMapping(value = "/courses")
+    @GetMapping
     public ModelAndView getAllCourses() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("courses", courseService.getAllCourses());
@@ -40,7 +40,7 @@ public class CourseController extends ExceptionController {
         return modelAndView;
     }
 
-    @GetMapping(value = "/courses/{id}")
+    @GetMapping(value = "/{id}")
     public ModelAndView getCourseById(@PathVariable(name = "id") Long id){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("course", courseService.getCourseDetails(id));
@@ -48,7 +48,7 @@ public class CourseController extends ExceptionController {
         return modelAndView;
     }
 
-    @GetMapping(value = "/courses/add")
+    @GetMapping(value = "/add")
     public ModelAndView showAddCourseView() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("course", new CourseDTO());
@@ -56,7 +56,7 @@ public class CourseController extends ExceptionController {
         return modelAndView;
     }
 
-    @PostMapping(value = "/courses/add")
+    @PostMapping(value = "/add")
     public ModelAndView addCourse(@Valid @ModelAttribute("course") CourseDTO courseDTO, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
         if (bindingResult.hasErrors()) {
@@ -69,7 +69,7 @@ public class CourseController extends ExceptionController {
         return modelAndView;
     }
 
-    @GetMapping(value = "/courses/edit/{id}")
+    @GetMapping(value = "/edit/{id}")
     public ModelAndView getEditCourseView(@PathVariable(name = "id") Long id) {
         ModelAndView modelAndView = new ModelAndView();
         Course course = courseService.findById(id);
@@ -81,7 +81,7 @@ public class CourseController extends ExceptionController {
         return modelAndView;
     }
 
-    @PostMapping(value = "/courses/edit/{id}")
+    @PostMapping(value = "/edit/{id}")
     public ModelAndView editCourse(@Valid @ModelAttribute("course") CourseDTO courseDTO,
                                    @PathVariable(name = "id") Long id,
                                    BindingResult bindingResult) {
@@ -95,13 +95,13 @@ public class CourseController extends ExceptionController {
         return modelAndView;
     }
 
-    @GetMapping("/courses/changeActivation/{id}")
+    @GetMapping("/changeActivation/{id}")
     public String changeActivation(@PathVariable(name = "id") Long id){
         courseService.changeActivation(id);
         return "redirect:/cms/courses";
     }
 
-    @GetMapping(value = "/courses/delete/{id}")
+    @GetMapping(value = "/delete/{id}")
     public String deleteCourse(@PathVariable(name = "id") Long id){
         courseService.deleteCourse(id);
         return "redirect:/cms/courses";

@@ -20,4 +20,5 @@ public class BClassListItemDTO {
     private Date startDate;
     private Date estimatedEndDate;
     private int numberOfLessons;
+    private boolean isActivated;
 }

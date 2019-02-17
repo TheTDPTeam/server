@@ -1,6 +1,5 @@
 package com.tdpteam.web.controller;
 
-import com.tdpteam.repo.dto.SelectionItem;
 import com.tdpteam.repo.dto.semester.SemesterDTO;
 import com.tdpteam.repo.dto.semester.SemesterListItemDTO;
 import com.tdpteam.repo.entity.Course;
@@ -8,8 +7,6 @@ import com.tdpteam.repo.entity.Semester;
 import com.tdpteam.service.interf.CourseService;
 import com.tdpteam.service.interf.SemesterService;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -20,10 +17,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@RequestMapping("/cms")
+@RequestMapping("/cms/semesters")
 public class SemesterController {
-    private static final Logger logger =
-            LoggerFactory.getLogger(SemesterController.class);
     private SemesterService semesterService;
     private CourseService courseService;
     private ModelMapper modelMapper;
@@ -35,7 +30,7 @@ public class SemesterController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping(value = "/semesters")
+    @GetMapping
     public ModelAndView getAllCourses() {
         ModelAndView modelAndView = new ModelAndView();
         List<SemesterListItemDTO> semesterListItemDTOList = semesterService.getAllSemesters();
@@ -44,7 +39,7 @@ public class SemesterController {
         return modelAndView;
     }
 
-    @GetMapping(value = "/semesters/add")
+    @GetMapping(value = "/add")
     public ModelAndView showAddSemesterView(@RequestParam(value = "courseId", required = false) Long courseId) {
         ModelAndView modelAndView = new ModelAndView();
         SemesterDTO semesterDTO = new SemesterDTO();
@@ -59,8 +54,8 @@ public class SemesterController {
         return modelAndView;
     }
 
-    @PostMapping(value = "/semesters/add", params = "courseId")
-    public ModelAndView addCourse(@RequestParam(value = "courseId") Long courseId, @Valid @ModelAttribute("semester") SemesterDTO semesterDTO, BindingResult bindingResult) {
+    @PostMapping(value = "/add", params = "courseId")
+    public ModelAndView addSemester(@RequestParam(value = "courseId") Long courseId, @Valid @ModelAttribute("semester") SemesterDTO semesterDTO, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName("semester/addSemester");
@@ -72,13 +67,13 @@ public class SemesterController {
         return modelAndView;
     }
 
-    @GetMapping("/semesters/changeActivation/{id}")
+    @GetMapping("/changeActivation/{id}")
     public String changeActivation(@PathVariable(name = "id") Long id){
         semesterService.changeActivation(id);
         return "redirect:/cms/semesters";
     }
 
-    @GetMapping(value = "/semesters/delete/{id}")
+    @GetMapping(value = "/delete/{id}")
     public String deleteCourse(@PathVariable(name = "id") Long id){
         semesterService.deleteSemester(id);
         return "redirect:/cms/semesters";

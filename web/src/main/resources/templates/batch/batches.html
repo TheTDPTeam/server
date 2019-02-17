@@ -14,6 +14,12 @@
 </head>
 <body>
 <div layout:fragment="content">
+    <a th:href="@{/cms/batches/add}">
+        <button class="btn btn-primary">
+            Add a new batch
+        </button>
+    </a>
+    <br/>
     <table class="table table-striped table-responsive-md">
         <thead>
         <tr>
@@ -22,7 +28,6 @@
             <th scope="col">Code</th>
             <th scope="col">Course</th>
             <th scope="col">Start date</th>
-            <th scope="col">End date</th>
             <th scope="col">Number of students</th>
             <th scope="col">Activation</th>
             <th scope="col">Actions</th>
@@ -36,7 +41,6 @@
             <td th:text="${batch.getCode()}"></td>
             <td th:text="${batch.getCourseCode()}"></td>
             <td th:text="${#dates.format(batch.getStartDate(),'MMM dd, yyyy')}"></td>
-            <td th:text="${#dates.format(batch.getEndDate(),'MMM dd, yyyy')}"></td>
             <td th:text="${batch.getNumberOfStudents()}"></td>
             <td th:text="${batch.isActivated()?'Activated':'Deactivated'}" th:style="'color:' + ${batch.isActivated() ? '#28a745':'#ffc107'}"></td>
             <td>

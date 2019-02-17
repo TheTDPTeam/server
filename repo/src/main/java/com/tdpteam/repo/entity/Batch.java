@@ -21,8 +21,6 @@ public class Batch extends BaseEntityAudit {
     private String code;
     @Column
     private Date startDate;
-    @Column
-    private Date endDate;
 
     @OneToMany(mappedBy = "batch")
     private Set<Student> students = new HashSet<>();

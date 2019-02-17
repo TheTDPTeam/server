@@ -17,7 +17,6 @@ public class BatchListItemDTO {
     private String code;
     private String courseCode;
     private Date startDate;
-    private Date endDate;
     private int numberOfStudents;
     private boolean isActivated;
 }

@@ -1,5 +1,6 @@
 package com.tdpteam.service.impl;
 
+import com.tdpteam.repo.dto.SelectionItem;
 import com.tdpteam.repo.dto.student.StudentListItemDTO;
 import com.tdpteam.repo.entity.Batch;
 import com.tdpteam.repo.entity.user.Student;
@@ -60,5 +61,16 @@ public class StudentServiceImpl implements StudentService {
             student.setBatch(optionalBatch.get());
             studentRepository.save(student);
         }
+    }
+
+    @Override
+    public List<SelectionItem> getAvailableStudentsForJoiningClass() {
+        List<Student> students = studentRepository.findAllByAccount_IsActivated(true);
+        List<SelectionItem> selectionItems = new ArrayList<>();
+        students.forEach(student -> selectionItems.add(
+                new SelectionItem(student.getId(),
+                        student.getAccount().getUserDetail().getFullName() + "|" + student.getBatch().getName())
+        ));
+        return selectionItems;
     }
 }

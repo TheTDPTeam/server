@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Class detail</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="col-md-6 col-md-offset-3" style="margin: 0 auto">
+        <table class="table">
+            <tbody>
+            <tr>
+                <th scope="row">Name</th>
+                <td th:text="${bClass.getName()}"></td>
+            </tr>
+            <tr>
+                <th scope="row">Teacher</th>
+                <td th:text="${bClass.getTeacherName()}"></td>
+            </tr>
+            <tr>
+                <th scope="row">Subject</th>
+                <td th:text="${bClass.getSubjectName()}"></td>
+            </tr>
+            <tr>
+                <th scope="row">Number of lessons</th>
+                <td th:text="${bClass.getNumberOfLessons()}"></td>
+            </tr>
+            <tr>
+                <th scope="row">Number of students</th>
+                <td th:text="${bClass.getNumberOfStudents()}"></td>
+            </tr>
+            <tr>
+                <th scope="row">Start date</th>
+                <td th:text="${#dates.format(bClass.getStartDate(),'MMM dd, yyyy')}"></td>
+            </tr>
+            <tr>
+                <th scope="row">Estimated end date</th>
+                <td th:text="${#dates.format(bClass.getEstimatedEndDate(),'MMM dd, yyyy')}"></td>
+            </tr>
+            <tr>
+                <th scope="row">Calendar</th>
+                <td th:text="${bClass.getCalendar()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <h5>Student:</h5>
+        <table class="table">
+            <tbody>
+            <tr th:each="student : ${bClass.getStudents()}">
+                <th scope="row" th:text="${student.getAccount().getUserDetail().getFullName()}"></th>
+                <td th:text="${student.getAccount().getEmail()}"></td>
+                <td th:text="${student.getBatch().getName()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <a th:href="@{/cms/classes/checkAttendance/{id}(id = ${bClass.getId()})}">
+        <button class="btn btn-primary">Go to attendance</button>
+    </a>
+    <a th:href="@{/cms/classes/checkScore/{id}(id = ${bClass.getId()})}">
+        <button class="btn btn-primary">Go to score</button>
+    </a>
+</div>
+</body>
+</html>

@@ -2,9 +2,11 @@ package com.tdpteam.repo.dto.batch;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 
@@ -23,13 +25,9 @@ public class BatchDTO {
 
     @Getter
     @Setter
-    @NotEmpty(message = "Please input the start date of new batch")
+    @NotNull(message = "Please input the start date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startDate;
-
-    @Getter
-    @Setter
-    @NotEmpty(message = "Please input the end date of new batch")
-    private Date endDate;
 
     @Getter
     @Setter
