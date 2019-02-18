@@ -1,36 +1,25 @@
 package com.tdpteam.web.controller;
 
 import com.tdpteam.repo.dto.course.CourseDTO;
-import com.tdpteam.repo.dto.course.CourseDetailDTO;
-import com.tdpteam.repo.dto.course.CourseListItemDTO;
-import com.tdpteam.repo.entity.Course;
-import com.tdpteam.service.helper.ExceptionLogGenerator;
 import com.tdpteam.service.interf.CourseService;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @RequestMapping("/cms/courses")
 public class CourseController extends ExceptionController {
     private CourseService courseService;
-    private ModelMapper modelMapper;
 
     @Autowired
-    public CourseController(CourseService courseService, ModelMapper modelMapper) {
+    public CourseController(CourseService courseService) {
         this.courseService = courseService;
-        this.modelMapper = modelMapper;
     }
-
 
     @GetMapping
     public ModelAndView getAllCourses() {
@@ -62,9 +51,8 @@ public class CourseController extends ExceptionController {
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName("course/addCourse");
         } else {
-            Course course = modelMapper.map(courseDTO, Course.class);
-            courseService.saveCourse(course);
-            modelAndView.setViewName("redirect:/cms/courses");
+            courseService.saveCourseFromCourseDTO(courseDTO);
+            modelAndView.setViewName(courseService.redirectToCourseList());
         }
         return modelAndView;
     }
@@ -72,11 +60,8 @@ public class CourseController extends ExceptionController {
     @GetMapping(value = "/edit/{id}")
     public ModelAndView getEditCourseView(@PathVariable(name = "id") Long id) {
         ModelAndView modelAndView = new ModelAndView();
-        Course course = courseService.findById(id);
-        CourseDTO courseDTO = modelMapper.map(course, CourseDTO.class);
-        courseDTO.setIsActivated(course.isActivated());
         modelAndView.addObject("courseId", id);
-        modelAndView.addObject("course", courseDTO);
+        modelAndView.addObject("course", courseService.getCourseDTO(id));
         modelAndView.setViewName("course/editCourse");
         return modelAndView;
     }
@@ -90,7 +75,7 @@ public class CourseController extends ExceptionController {
             modelAndView.setViewName("course/editCourse");
         } else {
             courseService.updateCourse(id, courseDTO);
-            modelAndView.setViewName("redirect:/cms/courses");
+            modelAndView.setViewName(courseService.redirectToCourseList());
         }
         return modelAndView;
     }
@@ -98,12 +83,12 @@ public class CourseController extends ExceptionController {
     @GetMapping("/changeActivation/{id}")
     public String changeActivation(@PathVariable(name = "id") Long id){
         courseService.changeActivation(id);
-        return "redirect:/cms/courses";
+        return courseService.redirectToCourseList();
     }
 
     @GetMapping(value = "/delete/{id}")
     public String deleteCourse(@PathVariable(name = "id") Long id){
         courseService.deleteCourse(id);
-        return "redirect:/cms/courses";
+        return courseService.redirectToCourseList();
     }
 }

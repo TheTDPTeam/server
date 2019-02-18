@@ -1,6 +1,5 @@
 package com.tdpteam.web.controller;
 
-import com.tdpteam.repo.entity.Attendance;
 import com.tdpteam.service.interf.AttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+
+import static com.tdpteam.web.helper.HttpHelper.getGoBackRedirect;
 
 @Controller
 @RequestMapping("/cms/attendances")
@@ -24,6 +25,6 @@ public class AttendanceController {
     @GetMapping(value = "/{id}/update", params = "value")
     public String updateAttendance(@RequestParam("value") String value, @PathVariable("id") Long id, HttpServletRequest request){
         attendanceService.updateAttendanceStatus(id, value);
-        return "redirect:" + request.getHeader("Referer");
+        return getGoBackRedirect(request);
     }
 }

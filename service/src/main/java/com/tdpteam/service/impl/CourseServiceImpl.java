@@ -8,7 +8,6 @@ import com.tdpteam.repo.entity.Batch;
 import com.tdpteam.repo.entity.Course;
 import com.tdpteam.repo.entity.Semester;
 import com.tdpteam.repo.repository.CourseRepository;
-import com.tdpteam.repo.repository.SemesterRepository;
 import com.tdpteam.service.exception.course.CourseNotFoundException;
 import com.tdpteam.service.interf.CourseService;
 import org.modelmapper.ModelMapper;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -52,7 +50,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void saveCourse(Course course) {
+    public void saveCourseFromCourseDTO(CourseDTO courseDTO) {
+        Course course = modelMapper.map(courseDTO, Course.class);
         courseRepository.save(course);
     }
 
@@ -71,7 +70,7 @@ public class CourseServiceImpl implements CourseService {
         if (optionalCourse.isPresent()) {
             Course course = optionalCourse.get();
             modelMapper.map(courseDTO, course);
-            saveCourse(course);
+            courseRepository.save(course);
         }
     }
 
@@ -111,6 +110,19 @@ public class CourseServiceImpl implements CourseService {
                 new SelectionItem(course.getId(), course.getCode())
         ));
         return courseListItemDTOS;
+    }
+
+    @Override
+    public CourseDTO getCourseDTO(Long id) {
+        Course course = findById(id);
+        CourseDTO courseDTO = modelMapper.map(course, CourseDTO.class);
+        courseDTO.setIsActivated(course.isActivated());
+        return courseDTO;
+    }
+
+    @Override
+    public String redirectToCourseList() {
+        return "redirect:/cms/courses";
     }
 
     @Override

@@ -19,4 +19,6 @@ public interface SubjectService extends ActivationService{
     List<SelectionItem> getAllSubjectsForSelection();
 
     Subject getSubjectById(Long id);
+
+    String redirectToSubjectList();
 }

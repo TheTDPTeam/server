@@ -2,6 +2,7 @@ package com.tdpteam.service.impl;
 
 import com.tdpteam.repo.dto.account.AccountCreationDTO;
 import com.tdpteam.repo.dto.account.AccountListItemDTO;
+import com.tdpteam.repo.dto.account.AccountSetupDTO;
 import com.tdpteam.repo.entity.user.Student;
 import com.tdpteam.repo.entity.user.Teacher;
 import com.tdpteam.repo.entity.user.UserDetail;
@@ -150,5 +151,13 @@ public class AccountServiceImpl implements AccountService {
             return account.getId();
         }
         return null;
+    }
+
+    @Override
+    public Account createAdminAccount(AccountSetupDTO accountSetupDTO) {
+        Account adminAccount = modelMapper.map(accountSetupDTO, Account.class);
+        adminAccount = updateUserDetail(accountSetupDTO, adminAccount);
+        adminAccount.setRole(roleRepository.findByRole(String.valueOf(RoleType.ADMIN)));
+        return saveAccount(adminAccount);
     }
 }

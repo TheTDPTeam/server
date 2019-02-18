@@ -147,6 +147,11 @@ public class BClassServiceImpl implements BClassService {
     }
 
     @Override
+    public String redirectToClassList() {
+        return "redirect:/cms/classes";
+    }
+
+    @Override
     public void changeActivation(Long id) {
         Optional<BClass> optionalBClass = bClassRepository.findById(id);
         if (optionalBClass.isPresent()) {

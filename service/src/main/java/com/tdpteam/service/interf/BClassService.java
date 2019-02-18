@@ -19,4 +19,6 @@ public interface BClassService extends ActivationService{
     void deleteCourse(Long id);
 
     BClassDetailDTO getBClassDetail(Long id);
+
+    String redirectToClassList();
 }

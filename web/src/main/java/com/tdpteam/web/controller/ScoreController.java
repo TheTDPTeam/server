@@ -1,7 +1,7 @@
 package com.tdpteam.web.controller;
 
-import com.tdpteam.service.interf.AttendanceService;
 import com.tdpteam.service.interf.ScoreService;
+import com.tdpteam.web.helper.HttpHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,8 +22,11 @@ public class ScoreController {
     }
 
     @GetMapping(value = "/{id}/update", params = {"theory","practical"})
-    public String updateScore(@RequestParam("theory") Integer theory, @RequestParam("practical") Integer practical, @PathVariable("id") Long id, HttpServletRequest request){
+    public String updateScore(@RequestParam("theory") Integer theory,
+                              @RequestParam("practical") Integer practical,
+                              @PathVariable("id") Long id,
+                              HttpServletRequest request){
         scoreService.updateScore(id, theory, practical);
-        return "redirect:" + request.getHeader("Referer");
+        return HttpHelper.getGoBackRedirect(request);
     }
 }

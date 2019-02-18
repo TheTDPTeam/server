@@ -19,4 +19,6 @@ public interface BatchService extends ActivationService{
     void deleteSubject(Long id);
 
     List<SelectionItem> getAllBatchesForSelection();
+
+    String redirectToBatchList();
 }

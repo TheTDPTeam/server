@@ -38,8 +38,7 @@ public class AccountController {
     @GetMapping("/accounts")
     public ModelAndView seeAllAccount(Pageable pageable){
         ModelAndView modelAndView = new ModelAndView();
-        Page<AccountListItemDTO> accounts = accountService.getPaginatedAccountList(pageable);
-        modelAndView.addObject("accounts",accounts);
+        modelAndView.addObject("accounts",accountService.getPaginatedAccountList(pageable));
         modelAndView.setViewName("account/accountList");
         return modelAndView;
     }
