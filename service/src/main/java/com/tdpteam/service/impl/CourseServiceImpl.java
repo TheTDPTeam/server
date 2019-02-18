@@ -1,7 +1,7 @@
 package com.tdpteam.service.impl;
 
 import com.tdpteam.repo.dto.SelectionItem;
-import com.tdpteam.repo.dto.course.CourseApiItemResponse;
+import com.tdpteam.repo.api.response.CourseApiItemResponse;
 import com.tdpteam.repo.dto.course.CourseDTO;
 import com.tdpteam.repo.dto.course.CourseDetailDTO;
 import com.tdpteam.repo.dto.course.CourseListItemDTO;

@@ -1,6 +1,6 @@
 package com.tdpteam.api.controller;
 
-import com.tdpteam.repo.dto.course.CourseApiItemResponse;
+import com.tdpteam.repo.api.response.CourseApiItemResponse;
 import com.tdpteam.service.interf.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

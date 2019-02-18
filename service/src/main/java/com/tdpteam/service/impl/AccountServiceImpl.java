@@ -1,5 +1,6 @@
 package com.tdpteam.service.impl;
 
+import com.tdpteam.repo.api.response.StaffListItemResponse;
 import com.tdpteam.repo.dto.account.AccountCreationDTO;
 import com.tdpteam.repo.dto.account.AccountListItemDTO;
 import com.tdpteam.repo.dto.account.AccountSetupDTO;
@@ -27,8 +28,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import static com.tdpteam.service.helper.RoleType.STAFF;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -159,5 +164,18 @@ public class AccountServiceImpl implements AccountService {
         adminAccount = updateUserDetail(accountSetupDTO, adminAccount);
         adminAccount.setRole(roleRepository.findByRole(String.valueOf(RoleType.ADMIN)));
         return saveAccount(adminAccount);
+    }
+
+    @Override
+    public List<StaffListItemResponse> getAllStaffs() {
+        List<Account> accounts = accountRepository.findAllByRole_Role(String.valueOf(STAFF));
+        List<StaffListItemResponse> staffListItemResponses = new ArrayList<>();
+        accounts.forEach(account -> staffListItemResponses.add(
+                StaffListItemResponse.builder()
+                        .fullName(account.getUserDetail().getFullName())
+                        .email(account.getEmail())
+                        .phoneNumber(account.getUserDetail().getPhone()).build()
+        ));
+        return staffListItemResponses;
     }
 }

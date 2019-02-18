@@ -1,4 +1,4 @@
-package com.tdpteam.repo.dto.course;
+package com.tdpteam.repo.api.response;
 
 import com.tdpteam.repo.dto.semester.SemesterApiDTO;
 import lombok.Data;
