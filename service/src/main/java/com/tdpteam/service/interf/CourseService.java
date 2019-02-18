@@ -1,6 +1,7 @@
 package com.tdpteam.service.interf;
 
 import com.tdpteam.repo.dto.SelectionItem;
+import com.tdpteam.repo.dto.course.CourseApiItemResponse;
 import com.tdpteam.repo.dto.course.CourseDTO;
 import com.tdpteam.repo.dto.course.CourseDetailDTO;
 import com.tdpteam.repo.dto.course.CourseListItemDTO;
@@ -29,4 +30,6 @@ public interface CourseService extends ActivationService{
     CourseDTO getCourseDTO(Long id);
 
     String redirectToCourseList();
+
+    List<CourseApiItemResponse> getAllCourseInfo();
 }

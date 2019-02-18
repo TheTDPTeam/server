@@ -97,38 +97,7 @@ public class StudentServiceImpl implements StudentService {
         semesters.forEach(semester -> {
             Set<Subject> subjects = semester.getSubjects();
             List<SubjectScoreItemDTO> subjectScoreItemDTOList = new ArrayList<>();
-            subjects.forEach(subject -> {
-                Score score = scoreRepository.findTopByStudent_IdAndSubject_IdOrderByCreatedAtDesc(studentId, subject.getId());
-                if (score != null) {
-                    Integer theoryScore = score.getTheoryScore();
-                    Integer practicalScore = score.getPracticalScore();
-                    ScoreStatus theoryScoreStatus = getScoreStatus(
-                            theoryScore,
-                            subject.isHasTheoryExamination(),
-                            score.isTheoryScorePassed());
-                    ScoreStatus practicalScoreStatus = getScoreStatus(
-                            practicalScore,
-                            subject.isHasPracticalExamination(),
-                            score.isPracticalScorePassed());
-                    subjectScoreItemDTOList.add(
-                            SubjectScoreItemDTO.builder()
-                                    .subjectName(subject.getName())
-                                    .theoryScore(Double.valueOf(theoryScore))
-                                    .practicalScore(Double.valueOf(practicalScore))
-                                    .theoryScoreStatus(
-                                            theoryScoreStatus)
-                                    .practicalScoreStatus(
-                                            practicalScoreStatus)
-                                    .attendingRate(
-                                            getAttendanceRate(
-                                                    studentId,
-                                                    score.getBClass().getId(),
-                                                    subject.getNumberOfLessons()))
-                                    .isSuccess(getIsSuccess(theoryScoreStatus, practicalScoreStatus)).build()
-                    );
-                }
-
-            });
+            subjects.forEach(subject -> addSubjectScoreItemToList(studentId, subjectScoreItemDTOList, subject));
             if(subjectScoreItemDTOList.size() != 0){
                 ScoreListResponse scoreListResponse = new ScoreListResponse();
                 scoreListResponse.setSemesterName(semester.getName());
@@ -137,6 +106,42 @@ public class StudentServiceImpl implements StudentService {
             }
         });
         return scoreListResponses;
+    }
+
+    private void addSubjectScoreItemToList(Long studentId, List<SubjectScoreItemDTO> subjectScoreItemDTOList, Subject subject) {
+        Score score = scoreRepository.findTopByStudent_IdAndSubject_IdOrderByCreatedAtDesc(studentId, subject.getId());
+        if (score != null) {
+            Integer theoryScore = score.getTheoryScore();
+            Integer practicalScore = score.getPracticalScore();
+            ScoreStatus theoryScoreStatus = getScoreStatus(
+                    theoryScore,
+                    subject.isHasTheoryExamination(),
+                    score.isTheoryScorePassed());
+            ScoreStatus practicalScoreStatus = getScoreStatus(
+                    practicalScore,
+                    subject.isHasPracticalExamination(),
+                    score.isPracticalScorePassed());
+            subjectScoreItemDTOList.add(
+                    buildSubjectScoreItem(studentId, subject, score, theoryScore, practicalScore, theoryScoreStatus, practicalScoreStatus)
+            );
+        }
+    }
+
+    private SubjectScoreItemDTO buildSubjectScoreItem(Long studentId, Subject subject, Score score, Integer theoryScore, Integer practicalScore, ScoreStatus theoryScoreStatus, ScoreStatus practicalScoreStatus) {
+        return SubjectScoreItemDTO.builder()
+                .subjectName(subject.getName())
+                .theoryScore(Double.valueOf(theoryScore))
+                .practicalScore(Double.valueOf(practicalScore))
+                .theoryScoreStatus(
+                        theoryScoreStatus)
+                .practicalScoreStatus(
+                        practicalScoreStatus)
+                .attendingRate(
+                        getAttendanceRate(
+                                studentId,
+                                score.getBClass().getId(),
+                                subject.getNumberOfLessons()))
+                .isSuccess(getIsSuccess(theoryScoreStatus, practicalScoreStatus)).build();
     }
 
     private boolean getIsSuccess(ScoreStatus theoryScoreStatus, ScoreStatus practicalScoreStatus) {

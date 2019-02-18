@@ -1,9 +1,12 @@
 package com.tdpteam.service.impl;
 
 import com.tdpteam.repo.dto.SelectionItem;
+import com.tdpteam.repo.dto.course.CourseApiItemResponse;
 import com.tdpteam.repo.dto.course.CourseDTO;
 import com.tdpteam.repo.dto.course.CourseDetailDTO;
 import com.tdpteam.repo.dto.course.CourseListItemDTO;
+import com.tdpteam.repo.dto.semester.SemesterApiDTO;
+import com.tdpteam.repo.dto.subject.SubjectApiDTO;
 import com.tdpteam.repo.entity.Batch;
 import com.tdpteam.repo.entity.Course;
 import com.tdpteam.repo.entity.Semester;
@@ -123,6 +126,36 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public String redirectToCourseList() {
         return "redirect:/cms/courses";
+    }
+
+    @Override
+    public List<CourseApiItemResponse> getAllCourseInfo() {
+        List<Course> courses = courseRepository.findAllByOrderByCreatedAtDesc();
+        List<CourseApiItemResponse> courseApiItemResponses = new ArrayList<>();
+        courses.forEach(course -> {
+            List<SemesterApiDTO> semesterApiDTOList = new ArrayList<>();
+            course.getSemesters().forEach(semester -> {
+                List<SubjectApiDTO> subjectApiDTOList = new ArrayList<>();
+                semester.getSubjects().forEach(subject -> {
+                    subjectApiDTOList.add(
+                            modelMapper.map(subject, SubjectApiDTO.class)
+                    );
+                });
+                if(subjectApiDTOList.size()>0){
+                    SemesterApiDTO semesterApiDTO = new SemesterApiDTO();
+                    semesterApiDTO.setSemesterName(semester.getName());
+                    semesterApiDTO.setSubjects(subjectApiDTOList);
+                    semesterApiDTOList.add(semesterApiDTO);
+                }
+            });
+            if(semesterApiDTOList.size()>0){
+                CourseApiItemResponse courseApiItemResponse = new CourseApiItemResponse();
+                courseApiItemResponse.setCourseCode(course.getCode());
+                courseApiItemResponse.setSemesters(semesterApiDTOList);
+                courseApiItemResponses.add(courseApiItemResponse);
+            }
+        });
+        return courseApiItemResponses;
     }
 
     @Override
