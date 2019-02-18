@@ -28,4 +28,8 @@ public class AccountCreationDTO {
 
     @NotEmpty(message = "Please select user role")
     private String role;
+
+    @NotEmpty(message = "Please input user's phone number")
+    @Pattern(regexp = "^[0-9]*$", message = "Please input a valid phone number")
+    private String phone;
 }
