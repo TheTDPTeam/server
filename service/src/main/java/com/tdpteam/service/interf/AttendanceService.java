@@ -1,5 +1,6 @@
 package com.tdpteam.service.interf;
 
+import com.tdpteam.repo.api.response.StudentCalendarResponse;
 import com.tdpteam.repo.dto.attendance.AttendanceOfClassDTO;
 import com.tdpteam.repo.entity.Attendance;
 import com.tdpteam.repo.entity.BClass;
@@ -22,4 +23,6 @@ public interface AttendanceService {
 
     @Async
     void updateAttendanceStatus(Long id, String value);
+
+    StudentCalendarResponse getAttendancesByStudentId(Long studentId);
 }
