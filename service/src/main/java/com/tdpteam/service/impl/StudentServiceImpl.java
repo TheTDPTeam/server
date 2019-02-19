@@ -93,10 +93,12 @@ public class StudentServiceImpl implements StudentService {
         }
         List<ScoreListResponse> scoreListResponses = new ArrayList<>();
         Course course = batch.getCourse();
-        Set<Semester> semesters = course.getSemesters();
+        List<Semester> semesters = new ArrayList<>(course.getSemesters());
+        semesters.sort((o1, o2) -> o2.getCreatedAt().compareTo(o1.getCreatedAt()));
         semesters.forEach(semester -> {
-            Set<Subject> subjects = semester.getSubjects();
             List<SubjectScoreItemDTO> subjectScoreItemDTOList = new ArrayList<>();
+            List<Subject> subjects = new ArrayList<>(semester.getSubjects());
+            subjects.sort((o1, o2) -> o2.getCreatedAt().compareTo(o1.getCreatedAt()));
             subjects.forEach(subject -> addSubjectScoreItemToList(studentId, subjectScoreItemDTOList, subject));
             if(subjectScoreItemDTOList.size() != 0){
                 ScoreListResponse scoreListResponse = new ScoreListResponse();
