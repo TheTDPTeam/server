@@ -21,15 +21,19 @@ public class StudentServiceImpl implements StudentService {
     private BatchRepository batchRepository;
     private AttendanceRepository attendanceRepository;
     private ScoreRepository scoreRepository;
+    private BClassRepository bClassRepository;
 
     @Autowired
     public StudentServiceImpl(StudentRepository studentRepository,
                               BatchRepository batchRepository,
-                              AttendanceRepository attendanceRepository, ScoreRepository scoreRepository) {
+                              AttendanceRepository attendanceRepository,
+                              ScoreRepository scoreRepository,
+                              BClassRepository bClassRepository) {
         this.studentRepository = studentRepository;
         this.batchRepository = batchRepository;
         this.attendanceRepository = attendanceRepository;
         this.scoreRepository = scoreRepository;
+        this.bClassRepository = bClassRepository;
     }
 
     @Override
@@ -108,6 +112,16 @@ public class StudentServiceImpl implements StudentService {
             }
         });
         return scoreListResponses;
+    }
+
+    @Override
+    public int getLatestSemester(Long studentId) {
+        List<BClass> bClasses = bClassRepository.getBClassesByStudentId(studentId);
+        if(bClasses.size() > 0){
+            bClasses.sort((o1, o2) -> o2.getSubject().getSemester().getName().compareTo(o1.getSubject().getSemester().getName()));
+            return Integer.parseInt(bClasses.get(0).getSubject().getSemester().getName().split(" ")[1]);
+        }
+        return 0;
     }
 
     private void addSubjectScoreItemToList(Long studentId, List<SubjectScoreItemDTO> subjectScoreItemDTOList, Subject subject) {
