@@ -11,6 +11,12 @@
             var attendanceValue = document.getElementById('attendance'+attendanceId).value;
             window.location.href = "/cms/attendances/" + attendanceId + "/update?value="+attendanceValue;
         }
+
+        function skipDate(attendanceId) {
+            if(confirm('Are you sure to skip this date?')){
+                window.location.href = "/cms/attendances/" + attendanceId + "/skip";
+            }
+        }
     </script>
 </head>
 <body>
@@ -40,20 +46,31 @@
         <thead>
         <tr>
             <th scope="col">Student name</th>
-            <th scope="col" style="min-width: 150px" th:each="attendance : ${attendances.get(0).getAttendanceList()}" th:text="${#dates.format(attendance.getCheckingDate(),'MMM dd, yyyy')}"></th>
+            <th scope="col" style="min-width: 150px" th:each="attendance : ${attendances.get(0).getAttendanceList()}">
+                <p th:text="${#dates.format(attendance.getCheckingDate(),'MMM dd, yyyy')}"></p>
+                <button
+                        th:if="${!attendance.getStatus().toString().equals('Skipped')}"
+                        class="btn btn-danger"
+                        th:onclick="'skipDate(\''+ ${attendance.getId()} + '\');'">Skip</button>
+            </th>
         </tr>
         </thead>
         <tbody>
-
         <tr th:each="attendance: ${attendances}">
             <th scope="row" th:text="${attendance.getStudentName()}"></th>
             <td th:each="checkingItem : ${attendance.getAttendanceList()}">
-                <select th:id="'attendance'+${checkingItem.getId()}" th:onchange="'updateAttendance(\''+ ${checkingItem.getId()} + '\');'">
+                <select
+                        th:id="'attendance'+${checkingItem.getId()}"
+                        th:onchange="'updateAttendance(\''+ ${checkingItem.getId()} + '\');'"
+                        th:disabled="${checkingItem.getStatus().toString().equals('Skipped')}">
                     <option th:selected="${checkingItem.getStatus().toString().equals('NotYet')}" value="NotYet">NY</option>
                     <option th:selected="${checkingItem.getStatus().toString().equals('NotAttended')}" value="NotAttended">NA</option>
                     <option th:selected="${checkingItem.getStatus().toString().equals('Attended')}" value="Attended">A</option>
                     <option th:selected="${checkingItem.getStatus().toString().equals('AuthorizedLeave')}" value="AuthorizedLeave">AL</option>
                     <option th:selected="${checkingItem.getStatus().toString().equals('UnauthorizedLeave')}" value="UnauthorizedLeave">UL</option>
+                    <option
+                            th:if="${checkingItem.getStatus().toString().equals('NotYet') || checkingItem.getStatus().toString().equals('Skipped')}"
+                            th:selected="${checkingItem.getStatus().toString().equals('Skipped')}" value="Skipped">S</option>
                 </select>
             </td>
         </tr>
