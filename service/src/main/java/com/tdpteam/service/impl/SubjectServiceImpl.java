@@ -88,6 +88,11 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
+    public String redirectToSubjectList() {
+        return "redirect:/cms/subjects";
+    }
+
+    @Override
     public void changeActivation(Long id) {
         Optional<Subject> optionalSubject = subjectRepository.findById(id);
         if (optionalSubject.isPresent()) {

@@ -1,5 +1,6 @@
 package com.tdpteam.service.interf;
 
+import com.tdpteam.repo.api.response.ScoreListResponse;
 import com.tdpteam.repo.dto.SelectionItem;
 import com.tdpteam.repo.dto.student.StudentListItemDTO;
 import com.tdpteam.repo.entity.user.Student;
@@ -16,4 +17,6 @@ public interface StudentService {
     void changeBatch(Long id, Long batchId);
 
     List<SelectionItem> getAvailableStudentsForJoiningClass();
+
+    List<ScoreListResponse> getStudentScoreListById(Long studentId);
 }

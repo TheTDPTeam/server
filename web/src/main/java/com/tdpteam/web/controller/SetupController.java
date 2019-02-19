@@ -1,10 +1,9 @@
 package com.tdpteam.web.controller;
 
 import com.tdpteam.repo.dto.account.AccountSetupDTO;
-import com.tdpteam.repo.entity.user.UserDetail;
-import com.tdpteam.service.helper.RoleType;
 import com.tdpteam.repo.entity.user.Account;
 import com.tdpteam.repo.repository.RoleRepository;
+import com.tdpteam.service.helper.RoleType;
 import com.tdpteam.service.interf.AccountService;
 import com.tdpteam.service.interf.ConfigService;
 import org.modelmapper.ModelMapper;
@@ -42,8 +41,7 @@ public class SetupController {
         if (configService.isAdminConfigured()) {
             modelAndView.setViewName("redirect:/login");
         } else {
-            AccountSetupDTO accountSetupDTO = new AccountSetupDTO();
-            modelAndView.addObject("account", accountSetupDTO);
+            modelAndView.addObject("account", new AccountSetupDTO());
             modelAndView.setViewName("setup");
         }
         return modelAndView;
@@ -55,12 +53,13 @@ public class SetupController {
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName("setup");
         } else {
-            Account adminAccount = modelMapper.map(accountSetupDTO, Account.class);
-            adminAccount = accountService.updateUserDetail(accountSetupDTO, adminAccount);
-            adminAccount.setRole(roleRepository.findByRole(String.valueOf(RoleType.ADMIN)));
-            Account result = accountService.saveAccount(adminAccount);
-            configService.setAdminConfigured(true);
-            modelAndView.setViewName(result == null ? "setup" : "redirect:/login");
+            Account adminAccount = accountService.createAdminAccount(accountSetupDTO);
+            if (adminAccount == null){
+                modelAndView.setViewName("setup");
+            }else{
+                configService.setAdminConfigured(true);
+                modelAndView.setViewName("redirect:/login");
+            }
         }
         return modelAndView;
     }

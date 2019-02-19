@@ -87,6 +87,11 @@ public class BatchServiceImpl implements BatchService {
     }
 
     @Override
+    public String redirectToBatchList() {
+        return "redirect:/cms/batches";
+    }
+
+    @Override
     public void changeActivation(Long id) {
         Optional<Batch> optionalBatch = batchRepository.findById(id);
         if (optionalBatch.isPresent()) {

@@ -57,7 +57,7 @@ public class SubjectController {
             modelAndView.setViewName("subject/addSubject");
         } else {
             subjectService.saveSubject(subjectDTO);
-            modelAndView.setViewName("redirect:/cms/subjects");
+            modelAndView.setViewName(subjectService.redirectToSubjectList());
         }
         return modelAndView;
     }
@@ -65,12 +65,12 @@ public class SubjectController {
     @GetMapping("/changeActivation/{id}")
     public String changeActivation(@PathVariable(name = "id") Long id){
         subjectService.changeActivation(id);
-        return "redirect:/cms/subjects";
+        return subjectService.redirectToSubjectList();
     }
 
     @GetMapping(value = "/delete/{id}")
     public String deleteCourse(@PathVariable(name = "id") Long id){
         subjectService.deleteSubject(id);
-        return "redirect:/cms/subjects";
+        return subjectService.redirectToSubjectList();
     }
 }

@@ -57,7 +57,7 @@ public class BatchController {
             modelAndView.setViewName("batch/addBatch");
         }else{
             batchService.createBatch(batchDTO);
-            modelAndView.setViewName("redirect:/cms/batches");
+            modelAndView.setViewName(batchService.redirectToBatchList());
         }
         return modelAndView;
     }
@@ -65,12 +65,12 @@ public class BatchController {
     @GetMapping("/changeActivation/{id}")
     public String changeActivation(@PathVariable(name = "id") Long id){
         batchService.changeActivation(id);
-        return "redirect:/cms/batches";
+        return batchService.redirectToBatchList();
     }
 
     @GetMapping(value = "/delete/{id}")
     public String deleteCourse(@PathVariable(name = "id") Long id){
         batchService.deleteSubject(id);
-        return "redirect:/cms/batches";
+        return batchService.redirectToBatchList();
     }
 }

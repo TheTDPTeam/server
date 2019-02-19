@@ -1,6 +1,7 @@
 package com.tdpteam.service.impl;
 
 import com.tdpteam.repo.dto.SelectionItem;
+import com.tdpteam.repo.dto.semester.SemesterDTO;
 import com.tdpteam.repo.dto.semester.SemesterListItemDTO;
 import com.tdpteam.repo.entity.Course;
 import com.tdpteam.repo.entity.Semester;
@@ -9,6 +10,7 @@ import com.tdpteam.repo.repository.SemesterRepository;
 import com.tdpteam.service.exception.course.CourseNotFoundException;
 import com.tdpteam.service.helper.Constants;
 import com.tdpteam.service.interf.SemesterService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,11 +23,15 @@ import java.util.Set;
 public class SemesterServiceImpl implements SemesterService {
     private SemesterRepository semesterRepository;
     private CourseRepository courseRepository;
+    private ModelMapper modelMapper;
 
     @Autowired
-    public SemesterServiceImpl(SemesterRepository semesterRepository, CourseRepository courseRepository) {
+    public SemesterServiceImpl(SemesterRepository semesterRepository,
+                               CourseRepository courseRepository,
+                               ModelMapper modelMapper) {
         this.semesterRepository = semesterRepository;
         this.courseRepository = courseRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -44,12 +50,13 @@ public class SemesterServiceImpl implements SemesterService {
     }
 
     @Override
-    public void saveSemester(Semester semester, Long courseId) {
+    public void saveSemesterBySemesterDTO(SemesterDTO semesterDTO, Long courseId) {
         Optional<Course> optionalCourse = courseRepository.findById(courseId);
         if(!optionalCourse.isPresent()){
             throw new CourseNotFoundException(courseId);
         }
         Course course = optionalCourse.get();
+        Semester semester = modelMapper.map(semesterDTO, Semester.class);
         semester.setCourse(course);
         semester.setName(Constants.SEMESTER_PREFIX + " " + (course.getSemesters().size() + 1));
         Set<Semester> semesterSet = course.getSemesters();
@@ -84,6 +91,11 @@ public class SemesterServiceImpl implements SemesterService {
                 new SelectionItem(semester.getId(), semester.getName() + " of " + semester.getCourse().getCode())
         ));
         return semesterSelectionItemDTOS;
+    }
+
+    @Override
+    public String redirectToSemesterList() {
+        return "redirect:/cms/semesters";
     }
 
     @Override

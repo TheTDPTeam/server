@@ -21,7 +21,12 @@ public class BClassController {
     private ScoreService scoreService;
 
     @Autowired
-    public BClassController(BClassService bClassService, SubjectService subjectService, TeacherService teacherService, StudentService studentService, AttendanceService attendanceService, ScoreService scoreService) {
+    public BClassController(BClassService bClassService,
+                            SubjectService subjectService,
+                            TeacherService teacherService,
+                            StudentService studentService,
+                            AttendanceService attendanceService,
+                            ScoreService scoreService) {
         this.bClassService = bClassService;
         this.subjectService = subjectService;
         this.teacherService = teacherService;
@@ -68,7 +73,7 @@ public class BClassController {
             getObjectsForAddingBClasses(modelAndView);
         }else{
             bClassService.createBClass(bClassDTO);
-            modelAndView.setViewName("redirect:/cms/classes");
+            modelAndView.setViewName(bClassService.redirectToClassList());
         }
         return modelAndView;
     }
@@ -92,13 +97,13 @@ public class BClassController {
     @GetMapping("/changeActivation/{id}")
     public String changeActivation(@PathVariable(name = "id") Long id){
         bClassService.changeActivation(id);
-        return "redirect:/cms/classes";
+        return bClassService.redirectToClassList();
     }
 
     @GetMapping(value = "/delete/{id}")
     public String deleteCourse(@PathVariable(name = "id") Long id){
         bClassService.deleteCourse(id);
-        return "redirect:/cms/classes";
+        return bClassService.redirectToClassList();
     }
 
     @ModelAttribute("multiCheckboxAllValues")
