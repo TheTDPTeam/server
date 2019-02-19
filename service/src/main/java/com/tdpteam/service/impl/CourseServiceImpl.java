@@ -10,6 +10,8 @@ import com.tdpteam.repo.dto.subject.SubjectApiDTO;
 import com.tdpteam.repo.entity.Batch;
 import com.tdpteam.repo.entity.Course;
 import com.tdpteam.repo.entity.Semester;
+import com.tdpteam.repo.entity.Subject;
+import com.tdpteam.repo.entity.base.BaseEntityAudit;
 import com.tdpteam.repo.repository.CourseRepository;
 import com.tdpteam.service.exception.course.CourseNotFoundException;
 import com.tdpteam.service.interf.CourseService;
@@ -134,9 +136,13 @@ public class CourseServiceImpl implements CourseService {
         List<CourseApiItemResponse> courseApiItemResponses = new ArrayList<>();
         courses.forEach(course -> {
             List<SemesterApiDTO> semesterApiDTOList = new ArrayList<>();
-            course.getSemesters().forEach(semester -> {
+            List<Semester> semesters = new ArrayList<>(course.getSemesters());
+            semesters.sort(Comparator.comparing(BaseEntityAudit::getCreatedAt));
+            semesters.forEach(semester -> {
                 List<SubjectApiDTO> subjectApiDTOList = new ArrayList<>();
-                semester.getSubjects().forEach(subject -> {
+                List<Subject> subjects = new ArrayList<>(semester.getSubjects());
+                subjects.sort(Comparator.comparing(BaseEntityAudit::getCreatedAt));
+                subjects.forEach(subject -> {
                     subjectApiDTOList.add(
                             modelMapper.map(subject, SubjectApiDTO.class)
                     );
