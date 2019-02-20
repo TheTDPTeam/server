@@ -1,6 +1,6 @@
 package com.tdpteam.service.impl;
 
-import com.tdpteam.repo.api.response.StudentCalendarResponse;
+import com.tdpteam.repo.api.response.CalendarResponse;
 import com.tdpteam.repo.dto.attendance.AttendanceApiItemDTO;
 import com.tdpteam.repo.dto.attendance.AttendanceOfClassDTO;
 import com.tdpteam.repo.entity.Attendance;
@@ -131,27 +131,9 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public StudentCalendarResponse getAttendancesByStudentId(Long studentId) {
-        List<BClass> bClasses = bClassRepository.getBClassesByStudentId(studentId);
-
-        BClass currentBClassOfStudent;
-        if(bClasses.size()>0){
-            currentBClassOfStudent = bClasses.get(0);
-        }else{
-            return null;
-        }
-        List<AttendanceApiItemDTO> attendanceApiItemDTOList = new ArrayList<>();
-        currentBClassOfStudent.getAttendances().forEach(attendance -> attendanceApiItemDTOList.add(
-                AttendanceApiItemDTO.builder()
-                        .checkingDate(attendance.getCheckingDate())
-                        .status(attendance.getStatus().toString()).build()
-        ));
-        return StudentCalendarResponse.builder()
-                .subjectName(currentBClassOfStudent.getSubject().getName())
-                .teacherName(currentBClassOfStudent.getTeacher().getAccount().getUserDetail().getFullName())
-                .semesterName(currentBClassOfStudent.getSubject().getSemester().getName())
-                .calendar(currentBClassOfStudent.getCalendar())
-                .attendances(attendanceApiItemDTOList).build();
+    public List<CalendarResponse> getAttendancesByStudentId(Long studentId) {
+        List<BClass> bClasses = bClassRepository.findAllByActivatedOrderByCreatedAtAsc(true);
+        return null;
     }
 
     @Override

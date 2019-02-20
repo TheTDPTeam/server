@@ -13,8 +13,10 @@ import java.util.Date;
 @Data
 public class BClassDTO {
     @NotEmpty(message = "Please input the name of new class")
-    @Pattern(regexp = "^[A-Za-z0-9\\s]*$", message = "Please input a valid name of new class")
     private String name;
+    @NotEmpty(message = "Please input the code of new class")
+    @Pattern(regexp = "^[A-Za-z0-9\\s]*$", message = "Please input a valid code of new class")
+    private String code;
     @Min(value = 1)
     private Long teacherId;
     @Min(value = 1)

@@ -12,7 +12,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class StudentCalendarResponse {
+public class CalendarResponse {
+    private boolean isForCurrentStudent;
+    private String classCode;
     private String subjectName;
     private String teacherName;
     private String semesterName;

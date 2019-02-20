@@ -25,6 +25,15 @@
 
                 <div class="form-group">
                     <div class="col-sm-9 form-item">
+                        <label th:if="${#fields.hasErrors('code')}" th:errors="*{code}"
+                               class="validation-message"></label>
+                        <input type="text" th:field="*{code}"
+                               placeholder="Name" class="form-control"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-9 form-item">
                         <label th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"
                                class="validation-message"></label>
                         <input type="date" th:field="*{startDate}"

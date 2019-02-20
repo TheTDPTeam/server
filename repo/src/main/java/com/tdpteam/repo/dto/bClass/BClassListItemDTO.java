@@ -14,6 +14,7 @@ import java.util.Date;
 public class BClassListItemDTO {
     private Long id;
     private String name;
+    private String code;
     private String teacherName;
     private int numberOfStudents;
     private String subjectName;
