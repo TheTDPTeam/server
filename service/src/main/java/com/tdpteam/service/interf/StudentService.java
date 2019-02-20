@@ -19,4 +19,6 @@ public interface StudentService {
     List<SelectionItem> getAvailableStudentsForJoiningClass();
 
     List<ScoreListResponse> getStudentScoreListById(Long studentId);
+
+    int getLatestSemester(Long studentId);
 }

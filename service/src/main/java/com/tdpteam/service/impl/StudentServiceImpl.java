@@ -21,15 +21,19 @@ public class StudentServiceImpl implements StudentService {
     private BatchRepository batchRepository;
     private AttendanceRepository attendanceRepository;
     private ScoreRepository scoreRepository;
+    private BClassRepository bClassRepository;
 
     @Autowired
     public StudentServiceImpl(StudentRepository studentRepository,
                               BatchRepository batchRepository,
-                              AttendanceRepository attendanceRepository, ScoreRepository scoreRepository) {
+                              AttendanceRepository attendanceRepository,
+                              ScoreRepository scoreRepository,
+                              BClassRepository bClassRepository) {
         this.studentRepository = studentRepository;
         this.batchRepository = batchRepository;
         this.attendanceRepository = attendanceRepository;
         this.scoreRepository = scoreRepository;
+        this.bClassRepository = bClassRepository;
     }
 
     @Override
@@ -93,10 +97,12 @@ public class StudentServiceImpl implements StudentService {
         }
         List<ScoreListResponse> scoreListResponses = new ArrayList<>();
         Course course = batch.getCourse();
-        Set<Semester> semesters = course.getSemesters();
+        List<Semester> semesters = new ArrayList<>(course.getSemesters());
+        semesters.sort((o1, o2) -> o2.getCreatedAt().compareTo(o1.getCreatedAt()));
         semesters.forEach(semester -> {
-            Set<Subject> subjects = semester.getSubjects();
             List<SubjectScoreItemDTO> subjectScoreItemDTOList = new ArrayList<>();
+            List<Subject> subjects = new ArrayList<>(semester.getSubjects());
+            subjects.sort((o1, o2) -> o2.getCreatedAt().compareTo(o1.getCreatedAt()));
             subjects.forEach(subject -> addSubjectScoreItemToList(studentId, subjectScoreItemDTOList, subject));
             if(subjectScoreItemDTOList.size() != 0){
                 ScoreListResponse scoreListResponse = new ScoreListResponse();
@@ -106,6 +112,16 @@ public class StudentServiceImpl implements StudentService {
             }
         });
         return scoreListResponses;
+    }
+
+    @Override
+    public int getLatestSemester(Long studentId) {
+        List<BClass> bClasses = bClassRepository.getBClassesByStudentId(studentId);
+        if(bClasses.size() > 0){
+            bClasses.sort((o1, o2) -> o2.getSubject().getSemester().getName().compareTo(o1.getSubject().getSemester().getName()));
+            return Integer.parseInt(bClasses.get(0).getSubject().getSemester().getName().split(" ")[1]);
+        }
+        return 0;
     }
 
     private void addSubjectScoreItemToList(Long studentId, List<SubjectScoreItemDTO> subjectScoreItemDTOList, Subject subject) {

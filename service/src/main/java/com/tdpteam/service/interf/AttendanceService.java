@@ -25,4 +25,5 @@ public interface AttendanceService {
     void updateAttendanceStatus(Long id, String value);
 
     List<CalendarResponse> getAttendancesByStudentId(Long studentId);
+    void skipAttendance(Long id);
 }

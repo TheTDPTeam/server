@@ -132,7 +132,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<CourseApiItemResponse> getAllCourseInfo() {
-        List<Course> courses = courseRepository.findAllByOrderByCreatedAtDesc();
+        List<Course> courses = courseRepository.findAllByOrderByCreatedAtAsc();
         List<CourseApiItemResponse> courseApiItemResponses = new ArrayList<>();
         courses.forEach(course -> {
             List<SemesterApiDTO> semesterApiDTOList = new ArrayList<>();

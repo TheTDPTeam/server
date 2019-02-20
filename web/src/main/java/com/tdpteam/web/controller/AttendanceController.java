@@ -27,4 +27,10 @@ public class AttendanceController {
         attendanceService.updateAttendanceStatus(id, value);
         return getGoBackRedirect(request);
     }
+
+    @GetMapping(value = "/{id}/skip")
+    public String updateAttendance(@PathVariable("id") Long id, HttpServletRequest request){
+        attendanceService.skipAttendance(id);
+        return getGoBackRedirect(request);
+    }
 }
