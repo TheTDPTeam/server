@@ -139,6 +139,7 @@ public class BClassServiceImpl implements BClassService {
         }
         BClass bClass = optionalBClass.get();
         BClassDetailDTO bClassDetailDTO = modelMapper.map(bClass, BClassDetailDTO.class);
+        bClassDetailDTO.setCourseName(bClass.getSubject().getSemester().getCourse().getName());
         bClassDetailDTO.setNumberOfLessons(bClass.getSubject().getNumberOfLessons());
         bClassDetailDTO.setNumberOfStudents(bClass.getStudents().size());
         bClassDetailDTO.setSubjectName(bClass.getSubject().getName());

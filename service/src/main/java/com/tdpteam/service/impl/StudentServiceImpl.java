@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -117,11 +118,16 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+
     public int getLatestSemester(Long studentId) {
+        Optional<Student> optionalStudent = studentRepository.findById(studentId);
+        if(!optionalStudent.isPresent()) return 0;
         List<BClass> bClasses = bClassRepository.getBClassesByStudentId(studentId);
-        if(bClasses.size() > 0){
-            bClasses.sort((o1, o2) -> o2.getSubject().getSemester().getName().compareTo(o1.getSubject().getSemester().getName()));
-            return Integer.parseInt(bClasses.get(0).getSubject().getSemester().getName().split(" ")[1]);
+        List<BClass> filteredBClasses = bClasses.stream().filter(bClass -> bClass.getSubject()
+        .getSemester().getCourse().equals(optionalStudent.get().getBatch().getCourse())).collect(Collectors.toList());
+        if(filteredBClasses.size() > 0){
+            filteredBClasses.sort((o1, o2) -> o2.getSubject().getSemester().getName().compareTo(o1.getSubject().getSemester().getName()));
+            return Integer.parseInt(filteredBClasses.get(0).getSubject().getSemester().getName().split(" ")[1]);
         }
         return 0;
     }

@@ -21,6 +21,7 @@ public class BClassDetailDTO {
     private String teacherName;
     private int numberOfStudents;
     private String subjectName;
+    private String courseName;
     private Date startDate;
     private Date estimatedEndDate;
     private int numberOfLessons;
