@@ -24,5 +24,7 @@ public interface AttendanceService {
     @Async
     void updateAttendanceStatus(Long id, String value);
 
+
+    void skipAttendance(Long id);
     List<CalendarResponse> getAttendancesByStudentId(Long studentId);
 }

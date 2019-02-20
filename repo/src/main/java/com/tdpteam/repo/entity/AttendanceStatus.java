@@ -5,5 +5,6 @@ public enum AttendanceStatus {
     AuthorizedLeave,
     Attended,
     NotAttended,
-    NotYet
+    NotYet,
+    Skipped
 }

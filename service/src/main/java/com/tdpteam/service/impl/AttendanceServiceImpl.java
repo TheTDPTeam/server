@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AttendanceServiceImpl implements AttendanceService {
@@ -33,8 +34,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public Set<Attendance> generateAttendanceSetForClass(String calendarStr, Date startDate, int numberOfLessons) {
-        String[] calendarArr = calendarStr.split(",");
-        List<Integer> calendarIntArr = convertCalendarStringArrToIntArr(calendarArr);
+        List<Integer> calendarIntArr = getCalendarIntArr(calendarStr);
         Set<Attendance> attendanceSet = new HashSet<>();
         int currentCheckingDateIndex = getCheckingDateIndex(startDate);
         while (attendanceSet.size() < numberOfLessons) {
@@ -49,6 +49,11 @@ public class AttendanceServiceImpl implements AttendanceService {
             attendanceSet.add(attendance);
         }
         return attendanceSet;
+    }
+
+    private List<Integer> getCalendarIntArr(String calendarStr) {
+        String[] calendarArr = calendarStr.split(",");
+        return convertCalendarStringArrToIntArr(calendarArr);
     }
 
     private int getCheckingDateIndex(Date date) {
@@ -134,6 +139,39 @@ public class AttendanceServiceImpl implements AttendanceService {
     public List<CalendarResponse> getAttendancesByStudentId(Long studentId) {
         List<BClass> bClasses = bClassRepository.findAllByActivatedOrderByCreatedAtAsc(true);
         return null;
+    }
+
+    @Override
+    public void skipAttendance(Long id) {
+        Optional<Attendance> optionalAttendance = attendanceRepository.findById(id);
+        if(optionalAttendance.isPresent()){
+            Attendance attendance = optionalAttendance.get();
+            BClass bClass = attendance.getBClass();
+            Set<Attendance> attendances = bClass.getAttendances();
+            List<Attendance> skippingAttendances = attendances.stream().filter(
+                    attendanceItem -> attendanceItem.getCheckingDate().equals(attendance.getCheckingDate())).collect(Collectors.toList());
+            List<Attendance> attendancesOfStudent = attendanceRepository.findAllByStudent_IdAndBClass_Id(
+                    attendance.getStudent().getId(),
+                    bClass.getId());
+            attendancesOfStudent.sort(Comparator.comparing(Attendance::getCheckingDate));
+            Attendance currentLastAttendanceOfStudent = attendancesOfStudent.get(attendancesOfStudent.size()-1);
+            Date lastDate = currentLastAttendanceOfStudent.getCheckingDate();
+            Date newDate = moveToNextAvailableIndex(lastDate, getCheckingDateIndex(lastDate), getCalendarIntArr(bClass.getCalendar()));
+            bClass.getStudents().forEach(student -> {
+                Attendance newAttendance = new Attendance();
+                newAttendance.setBClass(bClass);
+                newAttendance.setCheckingDate(newDate);
+                newAttendance.setStudent(student);
+                newAttendance.setStatus(AttendanceStatus.NotYet);
+                attendances.add(newAttendance);
+            });
+            bClass.setAttendances(attendances);
+            skippingAttendances.forEach(skipAttendance -> {
+                skipAttendance.setStatus(AttendanceStatus.Skipped);
+                attendanceRepository.save(skipAttendance);
+            });
+            bClassRepository.save(bClass);
+        }
     }
 
     @Override

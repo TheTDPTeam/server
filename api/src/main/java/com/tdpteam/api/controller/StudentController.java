@@ -31,4 +31,11 @@ public class StudentController {
         Long studentId = account.getId();
         return studentService.getStudentScoreListById(studentId);
     }
+
+    @GetMapping("/latestSemester")
+    public int getLatestSemester(){
+        Account account = authenticationFacade.getCurrentUserPrincipal();
+        Long studentId = account.getId();
+        return studentService.getLatestSemester(studentId);
+    }
 }
