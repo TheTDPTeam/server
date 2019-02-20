@@ -37,6 +37,7 @@ public class BaseEntityAudit extends BaseEntity {
     @PrePersist
     public void setCreationDate(){
         this.createdAt = new Date();
+        this.updatedAt = new Date();
     }
 
     /**

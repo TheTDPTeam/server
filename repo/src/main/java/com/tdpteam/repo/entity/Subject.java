@@ -33,6 +33,9 @@ public class Subject extends BaseEntityAudit {
     @Column
     private boolean hasPracticalExamination = true;
 
+    @Column
+    private boolean isProject = false;
+
     @ManyToOne
     @JoinColumn(name = "semester_id", nullable = false)
     private Semester semester;

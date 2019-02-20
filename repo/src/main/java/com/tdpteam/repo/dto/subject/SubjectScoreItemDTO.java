@@ -17,5 +17,6 @@ public class SubjectScoreItemDTO {
     private Double practicalScore;
     private ScoreStatus practicalScoreStatus;
     private String attendingRate;
+    private boolean isProject;
     private boolean isSuccess;
 }

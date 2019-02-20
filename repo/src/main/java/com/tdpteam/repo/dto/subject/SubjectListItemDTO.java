@@ -12,5 +12,6 @@ public class SubjectListItemDTO {
     private int subjectOrder;
     private String courseCode;
     private String semesterName;
+    private boolean isProject;
     private boolean isActivated;
 }

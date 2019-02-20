@@ -14,6 +14,6 @@ public class ScoreForClassItemDTO {
     private String studentName;
     private Integer theoryScore;
     private Integer practicalScore;
-    private boolean isTheoryScorePassed;
     private boolean isPracticalScorePassed;
+    private boolean isTheoryScorePassed;
 }
