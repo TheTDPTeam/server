@@ -111,8 +111,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         students.forEach(student -> {
             AttendanceOfClassDTO attendanceOfClassDTO = new AttendanceOfClassDTO();
             attendanceOfClassDTO.setStudentName(student.getAccount().getUserDetail().getFullName());
-            List<Attendance> attendanceList = attendanceRepository.findAllByStudent_IdAndBClass_Id(student.getId(), id);
-            attendanceList.sort(Comparator.comparing(Attendance::getCheckingDate));
+            List<Attendance> attendanceList = attendanceRepository.findAllByStudent_IdAndBClass_IdOrderByCheckingDateAsc(student.getId(), id);
             attendanceOfClassDTO.setAttendanceList(attendanceList);
             attendanceOfClassDTOS.add(attendanceOfClassDTO);
         });
@@ -132,8 +131,34 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public List<CalendarResponse> getAttendancesByStudentId(Long studentId) {
-        List<BClass> bClasses = bClassRepository.findAllByActivatedOrderByCreatedAtAsc(true);
-        return null;
+        Iterable<BClass> bClasses = bClassRepository.findByIsActivatedTrueOrderByCreatedAtAsc();
+        List<CalendarResponse> calendarResponses = new ArrayList<>();
+        bClasses.forEach(bClass -> calendarResponses.add(CalendarResponse.builder()
+                .classCode(bClass.getCode())
+                .calendar(bClass.getCalendar())
+                .isForCurrentStudent(checkIsClassBelongWithCurrentUser(studentId, bClass))
+                .semesterName(bClass.getSubject().getSemester().getName())
+                .subjectName(bClass.getSubject().getName())
+                .teacherName(bClass.getTeacher().getAccount().getUserDetail().getFullName())
+                .attendances(getAttendancesForApiResponse(studentId, bClass))
+                .build()));
+        return calendarResponses;
+    }
+
+    private List<AttendanceApiItemDTO> getAttendancesForApiResponse(Long studentId, BClass bClass) {
+        List<Attendance> attendances = attendanceRepository.findAllByStudent_IdAndBClass_IdOrderByCheckingDateAsc(studentId, bClass.getId());
+        List<AttendanceApiItemDTO> attendanceApiItemDTOList = new ArrayList<>();
+        attendances.forEach(attendance -> attendanceApiItemDTOList.add(
+                AttendanceApiItemDTO.builder()
+                        .checkingDate(attendance.getCheckingDate())
+                        .status(attendance.getStatus().toString()).build()
+        ));
+        return attendanceApiItemDTOList;
+    }
+
+    private boolean checkIsClassBelongWithCurrentUser(Long studentId, BClass bClass) {
+        Optional<Student> optionalStudent = studentRepository.findById(studentId);
+        return optionalStudent.filter(student -> bClass.getStudents().contains(student)).isPresent();
     }
 
     @Override
