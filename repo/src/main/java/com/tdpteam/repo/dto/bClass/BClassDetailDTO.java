@@ -17,6 +17,7 @@ import java.util.Set;
 public class BClassDetailDTO {
     private String id;
     private String name;
+    private String code;
     private String teacherName;
     private int numberOfStudents;
     private String subjectName;

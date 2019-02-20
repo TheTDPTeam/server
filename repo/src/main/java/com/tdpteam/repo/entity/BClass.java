@@ -21,6 +21,9 @@ public class BClass extends BaseEntityAudit {
     @Column
     private String name;
 
+    @Column
+    private String code;
+
     @ManyToOne
     @JoinColumn(name = "teacher_id", nullable = false)
     private Teacher teacher;
