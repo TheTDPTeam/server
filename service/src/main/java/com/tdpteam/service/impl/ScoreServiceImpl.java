@@ -1,4 +1,4 @@
-package com.tdpteam.service.interf;
+package com.tdpteam.service.impl;
 
 import com.tdpteam.repo.dto.score.ScoreForClassItemDTO;
 import com.tdpteam.repo.entity.BClass;
@@ -7,6 +7,7 @@ import com.tdpteam.repo.entity.Subject;
 import com.tdpteam.repo.entity.user.Student;
 import com.tdpteam.repo.repository.ScoreRepository;
 import com.tdpteam.service.exception.score.ScoreNotFoundException;
+import com.tdpteam.service.interf.ScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
