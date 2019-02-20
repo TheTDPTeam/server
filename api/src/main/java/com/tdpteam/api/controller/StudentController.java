@@ -1,6 +1,7 @@
 package com.tdpteam.api.controller;
 
 import com.tdpteam.api.facade.AuthenticationFacade;
+import com.tdpteam.repo.api.response.LearningProgressResponse;
 import com.tdpteam.repo.api.response.ScoreListResponse;
 import com.tdpteam.repo.entity.user.Account;
 import com.tdpteam.service.interf.StudentService;
@@ -32,10 +33,10 @@ public class StudentController {
         return studentService.getStudentScoreListById(studentId);
     }
 
-    @GetMapping("/latestSemester")
-    public int getLatestSemester(){
+    @GetMapping("/learningProgressInfo")
+    public LearningProgressResponse getLearningProgressInfo(){
         Account account = authenticationFacade.getCurrentUserPrincipal();
         Long studentId = account.getId();
-        return studentService.getLatestSemester(studentId);
+        return studentService.getStudentLearningProgressInfo(studentId);
     }
 }

@@ -1,5 +1,6 @@
 package com.tdpteam.service.interf;
 
+import com.tdpteam.repo.api.response.LearningProgressResponse;
 import com.tdpteam.repo.api.response.ScoreListResponse;
 import com.tdpteam.repo.dto.SelectionItem;
 import com.tdpteam.repo.dto.student.StudentListItemDTO;
@@ -21,4 +22,6 @@ public interface StudentService {
     List<ScoreListResponse> getStudentScoreListById(Long studentId);
 
     int getLatestSemester(Long studentId);
+
+    LearningProgressResponse getStudentLearningProgressInfo(Long studentId);
 }

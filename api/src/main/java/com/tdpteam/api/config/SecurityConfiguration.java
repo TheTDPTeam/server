@@ -39,7 +39,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/swagger-ui.html",
                         "/v2/api-docs",
                         "/webjars/**").permitAll()
-                .antMatchers("/api/myScore").hasAuthority(String.valueOf(STUDENT))
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));

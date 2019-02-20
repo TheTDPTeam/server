@@ -1,5 +1,6 @@
 package com.tdpteam.service.impl;
 
+import com.tdpteam.repo.api.response.LearningProgressResponse;
 import com.tdpteam.repo.api.response.ScoreListResponse;
 import com.tdpteam.repo.dto.SelectionItem;
 import com.tdpteam.repo.dto.score.ScoreStatus;
@@ -7,6 +8,7 @@ import com.tdpteam.repo.dto.student.StudentListItemDTO;
 import com.tdpteam.repo.dto.subject.SubjectScoreItemDTO;
 import com.tdpteam.repo.entity.*;
 import com.tdpteam.repo.entity.user.Student;
+import com.tdpteam.repo.helper.Constants;
 import com.tdpteam.repo.repository.*;
 import com.tdpteam.service.exception.student.StudentNotFoundException;
 import com.tdpteam.service.interf.StudentService;
@@ -124,6 +126,74 @@ public class StudentServiceImpl implements StudentService {
         return 0;
     }
 
+    @Override
+    public LearningProgressResponse getStudentLearningProgressInfo(Long studentId) {
+        Double averageScore = getCumulativeGradePointAverage(studentId);
+        return LearningProgressResponse.builder()
+                .cumulativeGradePointAverage(averageScore)
+                .latestSemester(getLatestSemester(studentId))
+                .gradeNeededToGetNextLevel(getGradeNeededToReachNextStateOfDegree(averageScore)).build();
+    }
+
+    private Double getGradeNeededToReachNextStateOfDegree(Double averageScore) {
+        if(averageScore< Constants.PASSING_GRADE){
+            return Constants.PASSING_GRADE - averageScore;
+        }else if(averageScore<Constants.CREDIT_GRADE){
+            return Constants.CREDIT_GRADE - averageScore;
+        }else if(averageScore < Constants.DISTINCTION_GRADE){
+            return Constants.DISTINCTION_GRADE - averageScore;
+        }else {
+            return 0.0d;
+        }
+    }
+
+    private Double getCumulativeGradePointAverage(Long studentId) {
+        Optional<Student> optionalStudent = studentRepository.findById(studentId);
+        if(!optionalStudent.isPresent()) return null;
+        Student student = optionalStudent.get();
+        Course course = student.getBatch().getCourse();
+        int numberOfTheoryScores = 0, numberOfPracticalScores = 0, numberOfProjects = 0;
+        double theorySum = 0.0d, practicalSum = 0.0d, projectScoreSum = 0.0d;
+
+        for(Semester semester : course.getSemesters()){
+            for(Subject subject : semester.getSubjects()){
+                Score score = scoreRepository.findTopByStudent_IdAndSubject_IdOrderByCreatedAtDesc(studentId,subject.getId());
+                if(score != null){
+                    if(subject.isProject()){
+                        numberOfProjects++;
+                        projectScoreSum += score.getPracticalScore();
+                    }else {
+                        if(subject.isHasTheoryExamination()){
+                            numberOfTheoryScores++;
+                            theorySum += score.getTheoryScore();
+                        }
+
+                        if(subject.isHasPracticalExamination()){
+                            numberOfPracticalScores++;
+                            practicalSum += score.getPracticalScore();
+                        }
+                    }
+                }
+            }
+        }
+
+        return getAverageScore(numberOfTheoryScores, numberOfPracticalScores, numberOfProjects, theorySum, practicalSum, projectScoreSum);
+    }
+
+    private double getAverageScore(int numberOfTheoryScores, int numberOfPracticalScores, int numberOfProjects, double theorySum, double practicalSum, double projectScoreSum) {
+        double average = 0.0;
+        if(numberOfTheoryScores > 0){
+            average += (theorySum / numberOfTheoryScores) * 0.5;
+        }
+        if(numberOfPracticalScores > 0){
+            average += (practicalSum / numberOfPracticalScores) * 0.25;
+        }
+        if(numberOfProjects > 0){
+            average += (projectScoreSum/numberOfProjects) * 0.25;
+        }
+        return average / 20 * 100;
+    }
+
     private void addSubjectScoreItemToList(Long studentId, List<SubjectScoreItemDTO> subjectScoreItemDTOList, Subject subject) {
         Score score = scoreRepository.findTopByStudent_IdAndSubject_IdOrderByCreatedAtDesc(studentId, subject.getId());
         if (score != null) {
@@ -157,6 +227,7 @@ public class StudentServiceImpl implements StudentService {
                                 studentId,
                                 score.getBClass().getId(),
                                 subject.getNumberOfLessons()))
+                .isProject(subject.getName().toLowerCase().contains("project"))
                 .isSuccess(getIsSuccess(theoryScoreStatus, practicalScoreStatus)).build();
     }
 
