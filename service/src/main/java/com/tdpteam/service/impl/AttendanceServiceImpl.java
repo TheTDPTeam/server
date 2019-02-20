@@ -175,10 +175,9 @@ public class AttendanceServiceImpl implements AttendanceService {
             Set<Attendance> attendances = bClass.getAttendances();
             List<Attendance> skippingAttendances = attendances.stream().filter(
                     attendanceItem -> attendanceItem.getCheckingDate().equals(attendance.getCheckingDate())).collect(Collectors.toList());
-            List<Attendance> attendancesOfStudent = attendanceRepository.findAllByStudent_IdAndBClass_Id(
+            List<Attendance> attendancesOfStudent = attendanceRepository.findAllByStudent_IdAndBClass_IdOrderByCheckingDateAsc(
                     attendance.getStudent().getId(),
                     bClass.getId());
-            attendancesOfStudent.sort(Comparator.comparing(Attendance::getCheckingDate));
             Attendance currentLastAttendanceOfStudent = attendancesOfStudent.get(attendancesOfStudent.size()-1);
             Date lastDate = currentLastAttendanceOfStudent.getCheckingDate();
             Date newDate = moveToNextAvailableIndex(lastDate, getCheckingDateIndex(lastDate), getCalendarIntArr(bClass.getCalendar()));
