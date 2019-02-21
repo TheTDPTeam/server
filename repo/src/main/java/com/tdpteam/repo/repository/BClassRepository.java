@@ -13,5 +13,5 @@ public interface BClassRepository extends JpaRepository<BClass, Long> {
     List<BClass> findAllByTeacher_IdOrderByCreatedAtDesc(Long id);
     @Query("select distinct b from BClass b join b.students s where s.id = :id order by b.createdAt desc")
     List<BClass> getBClassesByStudentId(Long id);
-    List<BClass> findAllByActivatedOrderByCreatedAtAsc(boolean isActivated);
+    Iterable<BClass> findByIsActivatedTrueOrderByCreatedAtAsc();
 }

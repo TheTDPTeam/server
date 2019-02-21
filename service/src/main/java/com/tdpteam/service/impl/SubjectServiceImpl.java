@@ -45,6 +45,7 @@ public class SubjectServiceImpl implements SubjectService {
             Semester semester = optionalSemester.get();
             subject.setSubjectOrder(semester.getSubjects().size() + 1);
             subject.setSemester(semester);
+            subject.setProject(subjectDTO.getName().toLowerCase().contains("project"));
             subjectRepository.save(subject);
         }
     }
@@ -61,6 +62,7 @@ public class SubjectServiceImpl implements SubjectService {
                         .semesterName(subject.getSemester().getName())
                         .subjectOrder(subject.getSubjectOrder())
                         .isActivated(subject.isActivated())
+                        .isProject(subject.isProject())
                         .build()
         ));
         return subjectListItemDTOList;
