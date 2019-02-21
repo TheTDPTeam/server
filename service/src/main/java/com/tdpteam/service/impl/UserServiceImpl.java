@@ -23,7 +23,8 @@ public class UserServiceImpl implements UserService {
                 .builder()
                 .email(account.getEmail())
                 .phone(account.getUserDetail().getPhone())
-                .fullName(account.getUserDetail().getFullName())
+                .firstName(account.getUserDetail().getFirstName())
+                .lastName(account.getUserDetail().getLastName())
                 .build();
     }
 }
