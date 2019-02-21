@@ -7,6 +7,7 @@ import com.tdpteam.repo.entity.BClass;
 import com.tdpteam.repo.entity.user.Student;
 import org.springframework.scheduling.annotation.Async;
 
+import javax.xml.crypto.Data;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -25,5 +26,9 @@ public interface AttendanceService {
     void updateAttendanceStatus(Long id, String value);
 
     List<CalendarResponse> getAttendancesByStudentId(Long studentId);
+
     void skipAttendance(Long id);
+
+    @Async
+    void sendMailToNotifySkippingAttendance(String studentEmail, String studentName, String skippedDate, String subjectName, String className);
 }

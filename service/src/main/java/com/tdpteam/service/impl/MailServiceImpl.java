@@ -1,6 +1,8 @@
 package com.tdpteam.service.impl;
 
 import com.sendgrid.*;
+import com.tdpteam.repo.entity.BClass;
+import com.tdpteam.service.helper.Constants;
 import com.tdpteam.service.interf.MailService;
 import org.springframework.stereotype.Service;
 
@@ -10,8 +12,8 @@ import java.io.IOException;
 public class MailServiceImpl implements MailService {
 
     @Override
-    public void sendMail(String to, String subject, String content) {
-        Mail mail = new Mail(new Email("duy2112@gmail.com"), subject, new Email(to), new Content("text/plain", content));
+    public void sendMail(String to, String subject, Content content) {
+        Mail mail = new Mail(new Email("duy2112@gmail.com"), subject, new Email(to), content);
         Request request = new Request();
         SendGrid emailSender = new SendGrid(System.getenv("SENDGRID_API_KEY"));
         try {
