@@ -1,6 +1,8 @@
 package com.tdpteam.api.controller;
 
 import com.tdpteam.api.facade.AuthenticationFacade;
+import com.tdpteam.repo.api.request.ChangePasswordRequest;
+import com.tdpteam.repo.api.request.UpdateDetailRequest;
 import com.tdpteam.repo.api.response.UserDetailResponse;
 import com.tdpteam.repo.entity.user.Account;
 import com.tdpteam.service.exception.user.BadUserRequestException;
@@ -9,10 +11,7 @@ import com.tdpteam.service.interf.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
@@ -42,5 +41,19 @@ public class UsersController {
         Account account = authenticationFacade.getCurrentUserPrincipal();
         UserDetailResponse userDetailResponse = userService.getUserDetailById(account.getId());
         return new ResponseEntity<>(userDetailResponse, HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/changePassword")
+    public ResponseEntity changePassword(@RequestBody ChangePasswordRequest data){
+        if(!data.getPassword().equals(data.getRetypePassword())) return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        Account account = authenticationFacade.getCurrentUserPrincipal();
+        userService.changePassword(account, data.getPassword());
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PostMapping("/updateDetails")
+    public ResponseEntity<UserDetailResponse> updateUserDetails(@RequestBody UpdateDetailRequest data){
+        Account account = authenticationFacade.getCurrentUserPrincipal();
+        return userService.updateUserDetail(account, data);
     }
 }
