@@ -10,5 +10,6 @@ import lombok.*;
 public class UserDetailResponse {
     private String email;
     private String phone;
-    private String fullName;
+    private String firstName;
+    private String lastName;
 }
