@@ -1,5 +1,6 @@
 package com.tdpteam.service.impl;
 
+import com.sendgrid.Content;
 import com.tdpteam.repo.api.response.CalendarResponse;
 import com.tdpteam.repo.dto.attendance.AttendanceApiItemDTO;
 import com.tdpteam.repo.dto.attendance.AttendanceOfClassDTO;
@@ -12,10 +13,13 @@ import com.tdpteam.repo.repository.BClassRepository;
 import com.tdpteam.repo.repository.StudentRepository;
 import com.tdpteam.service.exception.attendance.AttendanceNotFoundException;
 import com.tdpteam.service.exception.bClass.BClassNotFoundException;
+import com.tdpteam.service.helper.Constants;
 import com.tdpteam.service.interf.AttendanceService;
+import com.tdpteam.service.interf.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -24,12 +28,17 @@ public class AttendanceServiceImpl implements AttendanceService {
     private AttendanceRepository attendanceRepository;
     private BClassRepository bClassRepository;
     private StudentRepository studentRepository;
+    private MailService mailService;
 
     @Autowired
-    public AttendanceServiceImpl(AttendanceRepository attendanceRepository, BClassRepository bClassRepository, StudentRepository studentRepository) {
+    public AttendanceServiceImpl(AttendanceRepository attendanceRepository,
+                                 BClassRepository bClassRepository,
+                                 StudentRepository studentRepository,
+                                 MailService mailService) {
         this.attendanceRepository = attendanceRepository;
         this.bClassRepository = bClassRepository;
         this.studentRepository = studentRepository;
+        this.mailService = mailService;
     }
 
     @Override
@@ -188,6 +197,12 @@ public class AttendanceServiceImpl implements AttendanceService {
                 newAttendance.setStudent(student);
                 newAttendance.setStatus(AttendanceStatus.NotYet);
                 attendances.add(newAttendance);
+                sendMailToNotifySkippingAttendance(
+                        student.getAccount().getEmail(),
+                        student.getAccount().getUserDetail().getFullName(),
+                        new SimpleDateFormat("MMM dd, yyyy").format(attendance.getCheckingDate()),
+                        bClass.getSubject().getName(),
+                        bClass.getName());
             });
             bClass.setAttendances(attendances);
             skippingAttendances.forEach(skipAttendance -> {
@@ -196,6 +211,15 @@ public class AttendanceServiceImpl implements AttendanceService {
             });
             bClassRepository.save(bClass);
         }
+    }
+
+    @Override
+    public void sendMailToNotifySkippingAttendance(String studentEmail, String studentName, String skippedDate, String subjectName, String className) {
+        mailService.sendMail(studentEmail, Constants.LESSON_SKIPPED_EMAIL_SUBJECT,getSkippedLessonEmailContent(studentName, skippedDate, subjectName, className));
+    }
+
+    private Content getSkippedLessonEmailContent(String studentName, String skippedDate, String subjectName, String className) {
+        return new Content("text/plain", String.format("Hi %s, your %s class about %s on %s is skipped!",studentName,className, subjectName, skippedDate));
     }
 
     @Override
