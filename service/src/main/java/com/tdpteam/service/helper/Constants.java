@@ -10,4 +10,5 @@ public class Constants {
     public static final boolean USE_LETTERS_FOR_DEFAULT_PASSWORD = true;
     public static final boolean USE_NUMBERS_FOR_DEFAULT_PASSWORD = true;
     public static final String SEMESTER_PREFIX = "Semester";
+    public static final String CLASS_CREATION_EMAIL_SUBJECT = "Your new class is created";
 }

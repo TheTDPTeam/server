@@ -1,5 +1,6 @@
 package com.tdpteam.service.impl;
 
+import com.sendgrid.Content;
 import com.tdpteam.repo.api.response.StaffListItemResponse;
 import com.tdpteam.repo.dto.account.AccountCreationDTO;
 import com.tdpteam.repo.dto.account.AccountListItemDTO;
@@ -96,7 +97,7 @@ public class AccountServiceImpl implements AccountService {
         String generatedPassword = passwordService.generatePassword();
         user.setPassword(bCryptPasswordEncoder.encode(generatedPassword));
         String emailContent = generateAccountCreationMailContent(user.getUserDetail().getFirstName(), user.getEmail(), generatedPassword);
-        mailService.sendMail(user.getEmail(), Constants.ACCOUNT_CREATION_EMAIL_SUBJECT, emailContent);
+        mailService.sendMail(user.getEmail(), Constants.ACCOUNT_CREATION_EMAIL_SUBJECT, new Content("text/plain", emailContent));
         user.setActivated(true);
         return accountRepository.save(user);
     }
